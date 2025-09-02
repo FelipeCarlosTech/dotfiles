@@ -21,3 +21,9 @@ git clone <tu-repo-url> $HOME/code/felipecarlos/dotfiles
 cd $HOME/code/felipecarlos/dotfiles
 chmod +x install.sh scripts/*.sh
 ./install.sh
+
+## Plugins
+
+zoxide --> Para moverse rapido entre directorios, un cd con superpoderes
+fzf --> Para hacer busquedas de archivos en la terminal
+atuin --> Para manejar el historial

@@ -1,6 +1,10 @@
 # ~/.bashrc personalizado
 
+eval "$(starship init bash)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(zoxide init bash)"
+eval "$(fzf --bash)"
+eval "$(atuin init bash)"
 # Silenciar warning de zsh
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
@@ -11,14 +15,11 @@ case $- in
 esac
 
 # Historial
-HISTCONTROL=ignoreboth
-HISTSIZE=1000
-HISTFILESIZE=2000
-shopt -s histappend
+#HISTCONTROL=ignoreboth
+#HISTSIZE=1000
+#HISTFILESIZE=2000
+#shopt -s histappend
 shopt -s checkwinsize
-
-# Prompt básico
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # Aliases básicos
 alias ll='ls -alF'

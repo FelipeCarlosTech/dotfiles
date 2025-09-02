@@ -73,6 +73,7 @@ create_symlink() {
 create_symlink "$DOTFILES_DIR/alacritty" "$HOME/.config/alacritty"
 create_symlink "$DOTFILES_DIR/zellij" "$HOME/.config/zellij"
 create_symlink "$DOTFILES_DIR/bash/.bashrc" "$HOME/.bashrc"
+create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
 
 # LazyVim (symlink del directorio completo)
 if [ -d "$DOTFILES_DIR/nvim" ]; then
