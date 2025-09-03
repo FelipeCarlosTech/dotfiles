@@ -1,30 +1,32 @@
 # ~/.bashrc personalizado
 
-eval "$(starship init bash)"
-eval "$(/opt/homebrew/bin/brew shellenv)"
-eval "$(zoxide init bash)"
-eval "$(fzf --bash)"
-eval "$(atuin init bash)"
-# Silenciar warning de zsh
-export BASH_SILENCE_DEPRECATION_WARNING=1
-
 # Si no es interactiva, no hacer nada
 case $- in
 *i*) ;;
 *) return ;;
 esac
 
-# Historial
-#HISTCONTROL=ignoreboth
-#HISTSIZE=1000
-#HISTFILESIZE=2000
-#shopt -s histappend
+# Variables de entorno
+export BASH_SILENCE_DEPRECATION_WARNING=1
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# Configuraciones del shell
 shopt -s checkwinsize
 
+[[ -f "${HOMEBREW_PREFIX:-/opt/homebrew}/etc/profile.d/bash-preexec.sh" ]] && source "${HOMEBREW_PREFIX:-/opt/homebrew}/etc/profile.d/bash-preexec.sh"
+
+# Inicializar herramientas (DESPUÉS de bash-preexec)
+eval "$(starship init bash)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(zoxide init bash)"
+eval "$(fzf --bash)"
+eval "$(atuin init bash)"
+
 # Aliases básicos
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+alias ll='ls -alF -G'
+alias la='ls -A -G'
+alias l='ls -CF -G'
 alias grep='grep --color=auto'
 
 # Iniciar Zellij automáticamente
