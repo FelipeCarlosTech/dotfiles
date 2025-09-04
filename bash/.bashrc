@@ -1,5 +1,3 @@
-# ~/.bashrc personalizado
-
 # Si no es interactiva, no hacer nada
 case $- in
 *i*) ;;
@@ -11,17 +9,32 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+# Configuración del historial de bash
+export HISTSIZE=50000
+export HISTFILESIZE=100000
+export HISTCONTROL=ignoreboth:erasedups
+export HISTTIMEFORMAT="%F %T "
+shopt -s histappend
+
 # Configuraciones del shell
 shopt -s checkwinsize
 
-[[ -f "${HOMEBREW_PREFIX:-/opt/homebrew}/etc/profile.d/bash-preexec.sh" ]] && source "${HOMEBREW_PREFIX:-/opt/homebrew}/etc/profile.d/bash-preexec.sh"
+export FZF_CTRL_R_OPTS="
+  --preview 'echo {}'
+  --preview-window down:3:hidden:wrap
+  --bind '?:toggle-preview'
+  --height=80%
+  --layout=reverse
+  --info=inline
+  --tiebreak=index
+  --no-sort
+"
 
 # Inicializar herramientas (DESPUÉS de bash-preexec)
 eval "$(starship init bash)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(zoxide init bash)"
 eval "$(fzf --bash)"
-eval "$(atuin init bash)"
 
 # Aliases básicos
 alias ll='ls -alF -G'

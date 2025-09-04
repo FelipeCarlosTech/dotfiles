@@ -121,38 +121,14 @@ install_plugins() {
     echo "✅ fzf ya está instalado"
   fi
   
-  # Instalar bash-preexec (requerido para atuin)
-  if [ ! -f "$HOME/.bash-preexec.sh" ]; then
-    echo "⚡ Instalando bash-preexec..."
-    curl -s https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh -o "$HOME/.bash-preexec.sh"
-    if ! grep -q 'source ~/.bash-preexec.sh' "$HOME/.bashrc"; then
-      echo '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' >> "$HOME/.bashrc"
-      echo "✅ bash-preexec configurado en ~/.bashrc"
-    fi
-  else
-    echo "✅ bash-preexec ya está instalado"
-  fi
-  
-  # Instalar atuin
-  if ! command_exists atuin; then
-    echo "📚 Instalando atuin..."
-    brew install atuin
-    if ! grep -q 'eval "$(atuin init bash)"' "$HOME/.bashrc"; then
-      echo 'eval "$(atuin init bash)"' >> "$HOME/.bashrc"
-      echo "✅ atuin configurado en ~/.bashrc"
-    fi
-  else
-    echo "✅ atuin ya está instalado"
-  fi
   
   echo ""
   echo "🎉 ¡Todos los plugins instalados correctamente!"
   echo "💡 Reinicia tu terminal para activar los plugins"
   echo "📋 Comandos útiles:"
   echo "   • z <directorio>     - Navegar con zoxide"
-  echo "   • Ctrl+R            - Búsqueda de historial con atuin/fzf"
+  echo "   • Ctrl+R            - Búsqueda de historial con fzf"
   echo "   • Ctrl+T            - Búsqueda de archivos con fzf"
-  echo "   • atuin import      - Importar historial existente a atuin"
   echo ""
 }
 
