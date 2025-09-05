@@ -90,6 +90,8 @@ family = "FiraCode Nerd Font Mono"
 
 [window]
 option_as_alt = "Both"
+dimensions = { columns = 150, lines = 30 }
+startup_mode = "Windowed"
 opacity = 1
 padding.x = 10
 padding.y = 5
