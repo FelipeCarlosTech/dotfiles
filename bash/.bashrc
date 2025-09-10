@@ -41,6 +41,7 @@ alias ll='ls -alF -G'
 alias la='ls -A -G'
 alias l='ls -CF -G'
 alias grep='grep --color=auto'
+alias zda='zellij da -y'
 
 # Iniciar Zellij automáticamente
 if command -v zellij >/dev/null 2>&1; then
