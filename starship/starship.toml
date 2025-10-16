@@ -14,6 +14,7 @@ $java\
 $c\
 $conda\
 $zig\
+$python\
 $cmd_duration\
 $time\
 \n$character\
