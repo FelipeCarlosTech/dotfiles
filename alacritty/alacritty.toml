@@ -86,7 +86,7 @@ unfocused_hollow = true
 size = 17
 
 [font.normal]
-family = "FiraCode Nerd Font Mono"
+family = "Google Sans Code NF"
 
 [window]
 option_as_alt = "Both"
