@@ -411,8 +411,9 @@ web_client {
  
 // Choose the theme that is specified in the themes section.
 // Default: default
-// 
-theme "carbonfox"
+//
+theme "ayu_dark"
+// theme "carbonfox"  // BACKUP - Descomenta para volver a carbonfox
  
 // Choose the base input mode of zellij.
 // Default: normal

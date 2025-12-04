@@ -1,11 +1,21 @@
 return {
-  { "EdenEast/nightfox.nvim" },
+  -- Ayu Dark theme
+  { "Shatur/neovim-ayu" },
 
-  -- Configure LazyVim to load gruvbox
+  -- Configure LazyVim to load ayu-dark
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "carbonfox",
+      colorscheme = "ayu-dark",
     },
   },
+
+  -- BACKUP: Nightfox/Carbonfox theme (descomenta para volver)
+  -- { "EdenEast/nightfox.nvim" },
+  -- {
+  --   "LazyVim/LazyVim",
+  --   opts = {
+  --     colorscheme = "carbonfox",
+  --   },
+  -- },
 }

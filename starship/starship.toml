@@ -26,37 +26,63 @@ add_newline = true
 # Command timeout
 command_timeout = 3600000
 
-# carbonfox color settings
-palette = "carbonfox"
+# ayu-dark color settings
+palette = "ayu_dark"
 
 [fill]
 symbol = ' '
 
-[palettes.carbonfox]
-red = "#ee5396"
-green = "#25be6a"
-purple = "#be95ff"
-yellow = "#08bdba"
-os_bg = "#7b7c7e"
-os_fg = "#0c0c0c"
-dir_bg = "#25be6a"
-dir_fg = "#161616"
-git_bg = "#08bdba"
-git_fg = "#252525"
-lang_bg = "#78a9ff"
-lang_fg = "#353535"
-arrow = "#25be6a"      # carbonfox green
-os = "#7b7c7e"         # carbonfox os_bg
-directory = "#be95ff"
-git = "#08bdba"        # carbonfox yellow
-duration = "#be95ff"   # carbonfox purple
-text_color = "#25be6a" # carbonfox green
-text_light = "#161616" # carbonfox dir_fg
+[palettes.ayu_dark]
+red = "#F07178"
+green = "#C2D94C"
+purple = "#FFEE99"
+yellow = "#FFB454"
+blue = "#59C2FF"
+cyan = "#95E6CB"
+os_bg = "#B3B1AD"
+os_fg = "#0A0E14"
+dir_bg = "#C2D94C"
+dir_fg = "#0A0E14"
+git_bg = "#FFB454"
+git_fg = "#0A0E14"
+lang_bg = "#59C2FF"
+lang_fg = "#0A0E14"
+arrow = "#C2D94C"      # ayu green
+os = "#B3B1AD"         # ayu foreground
+directory = "#FFEE99"  # ayu purple/magenta
+git = "#FFB454"        # ayu yellow
+duration = "#95E6CB"   # ayu cyan
+text_color = "#C2D94C" # ayu green
+text_light = "#0A0E14" # ayu background
+
+# carbonfox color settings (BACKUP - Descomenta para volver a carbonfox)
+# palette = "carbonfox"
+#
+# [palettes.carbonfox]
+# red = "#F07178"
+# green = "#25be6a"
+# purple = "#be95ff"
+# yellow = "#08bdba"
+# os_bg = "#7b7c7e"
+# os_fg = "#0c0c0c"
+# dir_bg = "#25be6a"
+# dir_fg = "#161616"
+# git_bg = "#08bdba"
+# git_fg = "#252525"
+# lang_bg = "#59C2FF"
+# lang_fg = "#353535"
+# arrow = "#25be6a"      # carbonfox green
+# os = "#7b7c7e"         # carbonfox os_bg
+# directory = "#be95ff"
+# git = "#08bdba"        # carbonfox yellow
+# duration = "#be95ff"   # carbonfox purple
+# text_color = "#25be6a" # carbonfox green
+# text_light = "#161616" # carbonfox dir_fg
 
 # Pink FC icon for the prompt
 [character]
-success_symbol = "[ ](fg:#78a9ff)" # FC in carbonfox green
-error_symbol = "[ ](fg:#ee5396)"      # FC in carbonfox red if there is an error
+success_symbol = "[ ](fg:#59C2FF)" # FC in carbonfox green
+error_symbol = "[ ](fg:#F07178)"      # FC in carbonfox red if there is an error
 
 # User settings
 [username]
@@ -103,12 +129,12 @@ symbol = " "
 
 [python]
 disabled = false
-format = '[${symbol}${pyenv_prefix}(${version})( \($virtualenv\))](fg:#78a9ff)($style)'
+format = '[${symbol}${pyenv_prefix}(${version})( \($virtualenv\))](fg:#59C2FF)($style)'
 symbol = ""
 version_format = "${raw}"
 
 [java]
-format = '[[ $symbol ($version) ](fg:#ee5396)]($style)'
+format = '[[ $symbol ($version) ](fg:#F07178)]($style)'
 version_format = "${raw}"
 symbol = " "
 disabled = false
@@ -135,7 +161,7 @@ format = '[[ $symbol ($version) ](fg:#25be6a)]($style)'
 
 [rust]
 symbol = ""
-format = '[[ $symbol ($version) ](fg:#ee5396)]($style)'
+format = '[[ $symbol ($version) ](fg:#F07178)]($style)'
 
 [golang]
 symbol = ""

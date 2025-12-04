@@ -1,64 +1,121 @@
-# Mis Dotfiles CLI Workflow
+# Dotfiles - macOS CLI Setup
 
-Stack: **Alacritty** + **Bash** + **Zellij** + **LazyVim**
+**Stack**: Alacritty + Bash + Zellij + LazyVim + Starship
+**Theme**: Ayu Dark
+**Font**: Google Sans Code NF
 
-Compatible con macOS.
-
-## 🎯 **Approach: Repo como Fuente de Verdad**
-
-Este setup usa **symlinks bidireccionales**:
-- ✅ Modificas `$HOME/code/felipecarlos/dotfiles/alacritty/alacritty.toml` 
-- ✅ Cambios se aplican **inmediatamente** al sistema
-- ✅ `git commit` y `git push` para sincronizar
-- ✅ En otra máquina: `git pull` y tienes los cambios
-
-**NO** necesitas copiar archivos de ida y vuelta. El repo ES tu configuración.
-
-## 🚀 Instalación Rápida
+## Quick Setup (New Mac)
 
 ```bash
-git clone <tu-repo-url> $HOME/code/felipecarlos/dotfiles
-cd $HOME/code/felipecarlos/dotfiles
-chmod +x install.sh scripts/*.sh
+# Clone repo
+git clone git@github.com:FelipeCarlosTech/dotfiles.git ~/code/felipecarlos/dotfiles
+cd ~/code/felipecarlos/dotfiles
+
+# Install
+chmod +x install.sh
 ./install.sh
-
 ```
 
-## 🔌 Plugins Esenciales
+**That's it!** Restart your terminal.
 
-### Instalación Automática
-El script `install.sh` instala automáticamente todos los plugins. Para instalación manual:
+## How It Works
 
-### 🚀 zoxide - Smart CD
-Navegación inteligente entre directorios, un `cd` con superpoderes.
+This setup uses **symlinks** - the repo IS your live configuration:
+- Edit files in this repo → Changes apply instantly to your system
+- No copying back and forth
+- `git pull` on new machines = instant config sync
 
-**Instalación (macOS):**
+## What Gets Installed
+
+The `install.sh` script will:
+1. Install Homebrew (if needed)
+2. Install essential tools: `zoxide`, `fzf`
+3. Create symlinks:
+   - `alacritty/` → `~/.config/alacritty/`
+   - `zellij/` → `~/.config/zellij/`
+   - `nvim/` → `~/.config/nvim/`
+   - `starship/starship.toml` → `~/.config/starship.toml`
+   - `bash/.bashrc` → `~/.bashrc`
+
+## Essential Tools
+
+### Zoxide (Smart CD)
 ```bash
-brew install zoxide
-# Añadir a ~/.bashrc:
-eval "$(zoxide init bash)"
+z dotfiles    # Jump to ~/code/felipecarlos/dotfiles
+zi            # Interactive directory picker
 ```
 
-**Uso:**
+### FZF (Fuzzy Finder)
+- `Ctrl+R` - Search command history
+- `Ctrl+T` - Find files
+- `Alt+C` - Change directory
+
+### Zellij (Terminal Multiplexer)
+- Auto-starts with terminal
+- `Ctrl+g` to unlock/enter normal mode
+- Press `t` for tab mode, `p` for pane mode
+
+## Font Installation
+
+Install the required Nerd Font:
 ```bash
-z project     # Salta a cualquier directorio que contenga "project"
-zi           # Selector interactivo de directorios
+brew tap homebrew/cask-fonts
+brew install font-google-sans-code-nerd-font
 ```
 
-### 🔍 fzf - Fuzzy Finder
-Búsqueda difusa de archivos y comandos en terminal.
+## Sync Across Machines
 
-**Instalación (macOS):**
+On your current Mac:
 ```bash
-brew install fzf
-# Instalar integraciones de teclado y completions:
-$(brew --prefix)/opt/fzf/install
+git add .
+git commit -m "Update config"
+git push
 ```
 
-**Uso:**
+On your new Mac:
 ```bash
-Ctrl+R       # Buscar en historial de comandos
-Ctrl+T       # Buscar archivos/directorios
-Alt+C        # Cambiar a directorio encontrado
+cd ~/code/felipecarlos/dotfiles
+git pull
 ```
 
+Changes apply instantly via symlinks!
+
+## Switching Themes
+
+All configs have **Carbonfox backup** commented out. To revert:
+1. Uncomment Carbonfox sections
+2. Comment out Ayu Dark sections
+
+Files to check:
+- `alacritty/alacritty.toml`
+- `starship/starship.toml`
+- `zellij/config.kdl`
+- `zellij/layouts/default.kdl`
+- `nvim/lua/plugins/colorscheme.lua`
+- `nvim/lua/plugins/ui.lua`
+
+## Customization
+
+### Change Font Size
+Edit `alacritty/alacritty.toml:146`
+```toml
+size = 18  # Change to your preference
+```
+
+### Manage Zellij Sessions
+```bash
+zellij ls              # List sessions
+zellij attach main     # Attach to main session
+zda                    # Delete all sessions (custom alias)
+```
+
+### LazyVim
+Opens on first Neovim launch and installs plugins automatically.
+
+## Utilities
+
+```bash
+./scripts/sync.sh status      # Check symlink health
+./scripts/sync.sh git-status  # Quick git status
+./scripts/sync.sh backup      # Create config backup
+```
