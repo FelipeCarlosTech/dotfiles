@@ -11,12 +11,27 @@
 git clone git@github.com:FelipeCarlosTech/dotfiles.git ~/code/felipecarlos/dotfiles
 cd ~/code/felipecarlos/dotfiles
 
-# Install
+# Install everything
 chmod +x install.sh
 ./install.sh
 ```
 
-**That's it!** Restart your terminal.
+**What gets installed automatically:**
+- ✅ Alacritty (terminal emulator)
+- ✅ Zellij (terminal multiplexer)
+- ✅ Neovim (text editor)
+- ✅ Starship (shell prompt)
+- ✅ zoxide (smart cd)
+- ✅ fzf (fuzzy finder)
+- ✅ All config symlinks
+
+**Manual step (required):**
+```bash
+brew tap homebrew/cask-fonts
+brew install font-google-sans-code-nerd-font
+```
+
+**That's it!** Restart your terminal and you're ready.
 
 ## How It Works
 
@@ -24,18 +39,6 @@ This setup uses **symlinks** - the repo IS your live configuration:
 - Edit files in this repo → Changes apply instantly to your system
 - No copying back and forth
 - `git pull` on new machines = instant config sync
-
-## What Gets Installed
-
-The `install.sh` script will:
-1. Install Homebrew (if needed)
-2. Install essential tools: `zoxide`, `fzf`
-3. Create symlinks:
-   - `alacritty/` → `~/.config/alacritty/`
-   - `zellij/` → `~/.config/zellij/`
-   - `nvim/` → `~/.config/nvim/`
-   - `starship/starship.toml` → `~/.config/starship.toml`
-   - `bash/.bashrc` → `~/.bashrc`
 
 ## Essential Tools
 
@@ -54,14 +57,6 @@ zi            # Interactive directory picker
 - Auto-starts with terminal
 - `Ctrl+g` to unlock/enter normal mode
 - Press `t` for tab mode, `p` for pane mode
-
-## Font Installation
-
-Install the required Nerd Font:
-```bash
-brew tap homebrew/cask-fonts
-brew install font-google-sans-code-nerd-font
-```
 
 ## Sync Across Machines
 

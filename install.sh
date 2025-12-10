@@ -56,9 +56,10 @@ if ! command -v brew >/dev/null 2>&1; then
   echo ""
 fi
 
-# Install essential tools
-echo "🔧 Installing tools..."
-brew install zoxide fzf starship 2>/dev/null || true
+# Install all required applications and tools
+echo "🔧 Installing applications and tools..."
+brew install --cask alacritty 2>/dev/null || true
+brew install zellij neovim zoxide fzf starship 2>/dev/null || true
 echo ""
 
 # Create symlinks
@@ -82,8 +83,10 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "✅ Installation complete!"
 echo ""
 echo "📝 Next steps:"
-echo "   1. Restart your terminal"
-echo "   2. Install font: brew install font-google-sans-code-nerd-font"
+echo "   1. Install font manually:"
+echo "      brew tap homebrew/cask-fonts"
+echo "      brew install font-google-sans-code-nerd-font"
+echo "   2. Restart your terminal"
 echo "   3. Open Neovim - plugins will auto-install"
 echo ""
 echo "💡 Quick tips:"
