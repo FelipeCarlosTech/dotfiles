@@ -160,6 +160,5 @@ decorations = "none"
 [env]
 TERM = "xterm-256color"
 
-[terminal.shell]
-program = "/bin/bash"
-args = ["-l"]
+[terminal]
+shell = "/bin/bash"
