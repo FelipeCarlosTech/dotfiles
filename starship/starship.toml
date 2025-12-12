@@ -130,7 +130,7 @@ symbol = " "
 [python]
 disabled = false
 format = '[${symbol}${pyenv_prefix}(${version})( \($virtualenv\))](fg:#59C2FF)($style)'
-symbol = ""
+symbol = " "
 version_format = "${raw}"
 
 [java]
