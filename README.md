@@ -13,7 +13,15 @@ cd ~/code/felipecarlos/dotfiles
 
 # Install everything
 chmod +x install.sh
+
+# Install both terminals (default)
 ./install.sh
+
+# OR install only Ghostty
+./install.sh --ghostty
+
+# OR install only Alacritty
+./install.sh --alacritty
 ```
 
 **What gets installed automatically:**

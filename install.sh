@@ -5,8 +5,36 @@ set -e
 
 DOTFILES_DIR="$HOME/code/felipecarlos/dotfiles"
 
+# Parse command line arguments
+INSTALL_TERMINAL=""
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --ghostty)
+      INSTALL_TERMINAL="ghostty"
+      shift
+      ;;
+    --alacritty)
+      INSTALL_TERMINAL="alacritty"
+      shift
+      ;;
+    *)
+      echo "Unknown option: $1"
+      echo "Usage: $0 [--ghostty|--alacritty]"
+      echo "  --ghostty   Install only Ghostty terminal"
+      echo "  --alacritty Install only Alacritty terminal"
+      echo "  (no flag)   Install both terminals"
+      exit 1
+      ;;
+  esac
+done
+
 echo "🍎 Installing dotfiles for macOS..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+if [ -n "$INSTALL_TERMINAL" ]; then
+  echo "Terminal: $INSTALL_TERMINAL only"
+else
+  echo "Terminal: Both Alacritty and Ghostty"
+fi
 echo ""
 
 # Create symlink function
@@ -58,14 +86,36 @@ fi
 
 # Install all required applications and tools
 echo "🔧 Installing applications and tools..."
-brew install --cask alacritty ghostty 2>/dev/null || true
+
+# Install terminal emulator(s) based on flag
+if [ -z "$INSTALL_TERMINAL" ]; then
+  # No flag: install both
+  brew install --cask alacritty ghostty 2>/dev/null || true
+elif [ "$INSTALL_TERMINAL" = "ghostty" ]; then
+  brew install --cask ghostty 2>/dev/null || true
+elif [ "$INSTALL_TERMINAL" = "alacritty" ]; then
+  brew install --cask alacritty 2>/dev/null || true
+fi
+
+# Install other tools
 brew install zellij neovim zoxide fzf starship 2>/dev/null || true
 echo ""
 
 # Create symlinks
 echo "🔗 Creating symlinks..."
-create_symlink "$DOTFILES_DIR/alacritty" "$HOME/.config/alacritty"
-create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
+
+# Create terminal symlinks based on flag
+if [ -z "$INSTALL_TERMINAL" ]; then
+  # No flag: create both
+  create_symlink "$DOTFILES_DIR/alacritty" "$HOME/.config/alacritty"
+  create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
+elif [ "$INSTALL_TERMINAL" = "ghostty" ]; then
+  create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
+elif [ "$INSTALL_TERMINAL" = "alacritty" ]; then
+  create_symlink "$DOTFILES_DIR/alacritty" "$HOME/.config/alacritty"
+fi
+
+# Create other symlinks
 create_symlink "$DOTFILES_DIR/zellij" "$HOME/.config/zellij"
 create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
