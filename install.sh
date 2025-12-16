@@ -58,13 +58,14 @@ fi
 
 # Install all required applications and tools
 echo "🔧 Installing applications and tools..."
-brew install --cask alacritty 2>/dev/null || true
+brew install --cask alacritty ghostty 2>/dev/null || true
 brew install zellij neovim zoxide fzf starship 2>/dev/null || true
 echo ""
 
 # Create symlinks
 echo "🔗 Creating symlinks..."
 create_symlink "$DOTFILES_DIR/alacritty" "$HOME/.config/alacritty"
+create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
 create_symlink "$DOTFILES_DIR/zellij" "$HOME/.config/zellij"
 create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"

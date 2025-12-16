@@ -1,6 +1,6 @@
 # Dotfiles - macOS CLI Setup
 
-**Stack**: Alacritty + Bash + Zellij + LazyVim + Starship
+**Stack**: Alacritty / Ghostty + Bash + Zellij + LazyVim + Starship
 **Theme**: Ayu Dark
 **Font**: Google Sans Code NF
 
@@ -18,6 +18,7 @@ chmod +x install.sh
 
 **What gets installed automatically:**
 - ✅ Alacritty (terminal emulator)
+- ✅ Ghostty (modern terminal emulator)
 - ✅ Zellij (terminal multiplexer)
 - ✅ Neovim (text editor)
 - ✅ Starship (shell prompt)
