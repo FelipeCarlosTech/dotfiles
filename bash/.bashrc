@@ -30,6 +30,14 @@ export FZF_CTRL_R_OPTS="
   --no-sort
 "
 
+# Inicializar atuin solo en Ghostty (requiere bash-preexec)
+if [ -n "$GHOSTTY_RESOURCES_DIR" ]; then
+  [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+  if command -v atuin >/dev/null 2>&1; then
+    eval "$(atuin init bash)"
+  fi
+fi
+
 # Inicializar herramientas (DESPUÉS de bash-preexec)
 eval "$(starship init bash)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
