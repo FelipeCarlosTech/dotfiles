@@ -4,6 +4,9 @@ case $- in
 *) return ;;
 esac
 
+# Cargar ble.sh temprano (solo en Ghostty, solo en shells interactivos)
+[[ $- == *i* ]] && [[ -n "$GHOSTTY_RESOURCES_DIR" ]] && source ~/.local/share/blesh/ble.sh --noattach
+
 # Variables de entorno
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export LANG=en_US.UTF-8
@@ -30,15 +33,14 @@ export FZF_CTRL_R_OPTS="
   --no-sort
 "
 
-# Inicializar atuin solo en Ghostty (requiere bash-preexec)
+# Inicializar atuin solo en Ghostty (requiere ble.sh)
 if [ -n "$GHOSTTY_RESOURCES_DIR" ]; then
-  [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
   if command -v atuin >/dev/null 2>&1; then
     eval "$(atuin init bash)"
   fi
 fi
 
-# Inicializar herramientas (DESPUÉS de bash-preexec)
+# Inicializar herramientas
 eval "$(starship init bash)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(zoxide init bash)"
@@ -58,3 +60,6 @@ if command -v zellij >/dev/null 2>&1; then
     zellij attach main || zellij -s main
   fi
 fi
+
+# Attach ble.sh al final (solo en Ghostty, solo en shells interactivos)
+[[ $- == *i* ]] && [[ -n "$GHOSTTY_RESOURCES_DIR" ]] && ble-attach
