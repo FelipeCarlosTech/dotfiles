@@ -17,6 +17,9 @@ foreground = #B3B1AD
 cursor-color = #B3B1AD
 cursor-text = #0A0E14
 
+# Cursor Trail Effect (shader personalizado)
+custom-shader = shaders/cursor_trail.glsl
+
 # Selection Colors
 selection-background = #253340
 selection-foreground = #B3B1AD
