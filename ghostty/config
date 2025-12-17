@@ -13,8 +13,8 @@ command = /bin/bash -l
 background = #0A0E14
 foreground = #B3B1AD
 
-# Cursor Colors
-cursor-color = #B3B1AD
+# Cursor Colors (Ayu Dark Yellow for trail effect)
+cursor-color = #FFB454
 cursor-text = #0A0E14
 
 # Cursor Trail Effect (shader personalizado)

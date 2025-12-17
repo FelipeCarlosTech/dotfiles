@@ -128,17 +128,12 @@ create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.to
 create_symlink "$DOTFILES_DIR/bash/.bashrc" "$HOME/.bashrc"
 echo ""
 
-# Install ble.sh for atuin (only if Ghostty is installed)
+# Download bash-preexec for atuin (only if Ghostty is installed)
 if [ -z "$INSTALL_TERMINAL" ] || [ "$INSTALL_TERMINAL" = "ghostty" ]; then
-  if [ ! -d "$HOME/.local/share/blesh" ]; then
-    echo "📥 Installing ble.sh..."
-    cd /tmp
-    curl -sL https://github.com/akinomyoga/ble.sh/releases/download/nightly/ble-nightly.tar.xz -o ble-nightly.tar.xz
-    tar xJf ble-nightly.tar.xz
-    bash ble-nightly/ble.sh --install ~/.local/share 2>/dev/null || true
-    rm -rf ble-nightly ble-nightly.tar.xz
-    cd - > /dev/null
-    echo "  ✓ ble.sh installed"
+  if [ ! -f "$HOME/.bash-preexec.sh" ]; then
+    echo "📥 Downloading bash-preexec for atuin..."
+    curl -s https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh -o "$HOME/.bash-preexec.sh"
+    echo "  ✓ bash-preexec downloaded"
     echo ""
   fi
 fi
