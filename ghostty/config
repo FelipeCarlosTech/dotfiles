@@ -57,3 +57,6 @@ window-height = 70
 
 # Performance
 macos-option-as-alt = true
+
+# Keybindings - Clear all default Ghostty keybindings to let Zellij handle everything
+keybind = clear
