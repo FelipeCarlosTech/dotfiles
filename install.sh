@@ -91,12 +91,8 @@ echo "🔧 Installing applications and tools..."
 if [ -z "$INSTALL_TERMINAL" ]; then
   # No flag: install both
   brew install --cask alacritty ghostty 2>/dev/null || true
-  # Install atuin for Ghostty
-  brew install atuin 2>/dev/null || true
 elif [ "$INSTALL_TERMINAL" = "ghostty" ]; then
   brew install --cask ghostty 2>/dev/null || true
-  # Install atuin for Ghostty
-  brew install atuin 2>/dev/null || true
 elif [ "$INSTALL_TERMINAL" = "alacritty" ]; then
   brew install --cask alacritty 2>/dev/null || true
 fi
@@ -113,10 +109,8 @@ if [ -z "$INSTALL_TERMINAL" ]; then
   # No flag: create both
   create_symlink "$DOTFILES_DIR/alacritty" "$HOME/.config/alacritty"
   create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
-  create_symlink "$DOTFILES_DIR/atuin" "$HOME/.config/atuin"
 elif [ "$INSTALL_TERMINAL" = "ghostty" ]; then
   create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
-  create_symlink "$DOTFILES_DIR/atuin" "$HOME/.config/atuin"
 elif [ "$INSTALL_TERMINAL" = "alacritty" ]; then
   create_symlink "$DOTFILES_DIR/alacritty" "$HOME/.config/alacritty"
 fi
@@ -127,16 +121,6 @@ create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
 create_symlink "$DOTFILES_DIR/bash/.bashrc" "$HOME/.bashrc"
 echo ""
-
-# Download bash-preexec for atuin (only if Ghostty is installed)
-if [ -z "$INSTALL_TERMINAL" ] || [ "$INSTALL_TERMINAL" = "ghostty" ]; then
-  if [ ! -f "$HOME/.bash-preexec.sh" ]; then
-    echo "📥 Downloading bash-preexec for atuin..."
-    curl -s https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh -o "$HOME/.bash-preexec.sh"
-    echo "  ✓ bash-preexec downloaded"
-    echo ""
-  fi
-fi
 
 # Configure FZF keybindings
 if [ -f "$(brew --prefix)/opt/fzf/install" ]; then
@@ -160,5 +144,5 @@ echo "💡 Quick tips:"
 echo "   • Edit files in $DOTFILES_DIR - changes apply instantly"
 echo "   • Ctrl+g in terminal to unlock Zellij"
 echo "   • z <dir> to jump with zoxide"
-echo "   • Ctrl+R for enhanced history search (atuin in Ghostty, fzf in Alacritty)"
+echo "   • Ctrl+R for fzf history search"
 echo ""

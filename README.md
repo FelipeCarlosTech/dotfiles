@@ -17,9 +17,8 @@ A complete, production-ready dotfiles configuration for macOS developers featuri
 | **Multiplexer** | [Zellij](https://zellij.dev) | Modern terminal workspace manager |
 | **Editor** | [Neovim](https://neovim.io) + [LazyVim](https://www.lazyvim.org) | Blazingly fast IDE-like experience |
 | **Prompt** | [Starship](https://starship.rs) | Fast, customizable shell prompt |
-| **History** | [atuin](https://atuin.sh) | Magical shell history with sync |
+| **History** | [fzf](https://github.com/junegunn/fzf) | Fuzzy history search with Ctrl+R |
 | **Navigation** | [zoxide](https://github.com/ajeetdsouza/zoxide) | Smarter cd command |
-| **Finder** | [fzf](https://github.com/junegunn/fzf) | Fuzzy finder for everything |
 
 ### 🎨 Theme & Appearance
 
@@ -35,13 +34,6 @@ A complete, production-ready dotfiles configuration for macOS developers featuri
 - Native macOS performance with GPU acceleration
 - Ayu Dark theme with vibrant yellow cursor
 - Shell integration with inline completions
-
-### 🔍 atuin Shell History
-- **Fuzzy searchable** history across all sessions
-- **Compact inline mode** - no fullscreen interruption
-- Commands placed in prompt (edit before executing)
-- Sync history across machines
-- Only active in Ghostty for best performance
 
 ### 🪟 Zellij Workspace
 - **Auto-starts** with terminal (persistent sessions)
@@ -103,13 +95,11 @@ The installation script automatically installs:
 ✅ **Development Tools**
 - Zellij (terminal multiplexer)
 - Neovim (text editor)
-- atuin (shell history, Ghostty only)
 
 ✅ **CLI Utilities**
 - Starship (prompt)
 - zoxide (smart cd)
 - fzf (fuzzy finder)
-- bash-preexec (atuin integration)
 
 ✅ **Configuration**
 - All config files symlinked
@@ -143,17 +133,10 @@ Press p         # Pane mode (split, navigate, resize)
 Press 1-9       # Jump to specific tab
 ```
 
-#### atuin (Shell History - Ghostty only)
-```
-Ctrl+R          # Search history (compact inline mode)
-Up Arrow        # Previous command in history
-Enter           # Place command in prompt (don't execute)
-Enter again     # Execute the command
-```
-
 #### fzf (Fuzzy Finder)
 ```
-Ctrl+R          # Search command history (in Alacritty)
+Ctrl+R          # Search command history
+Up Arrow        # Previous command in history
 Ctrl+T          # Find files
 Alt+C           # Change directory interactively
 ```
@@ -191,7 +174,6 @@ dotfiles/
 │   ├── config           # Main configuration
 │   └── shaders/         # Custom GLSL shaders
 ├── alacritty/           # Alternative terminal config
-├── atuin/               # Shell history config
 ├── bash/                # Shell configuration
 ├── starship/            # Prompt configuration
 ├── zellij/              # Multiplexer config
@@ -214,12 +196,6 @@ font-size = 18  # Change to your preference
 Or `alacritty/alacritty.toml`:
 ```toml
 size = 18
-```
-
-#### Adjust atuin History Height
-Edit `atuin/config.toml`:
-```toml
-inline_height = 20  # Lines to show (default: 20)
 ```
 
 #### Modify Cursor Trail Color
@@ -297,11 +273,6 @@ Want to use a different theme? Update these files:
 ls -la ~/.config/ghostty
 # Should show: ~/.config/ghostty -> ~/code/felipecarlos/dotfiles/ghostty
 ```
-
-### atuin not working
-- **Check**: Are you using Ghostty? (atuin only works in Ghostty)
-- **Check**: Does `~/.bash-preexec.sh` exist?
-- **Fix**: Run `./install.sh --ghostty` again
 
 ### Cursor trail not showing
 - **Fix**: Restart Ghostty completely (Cmd+Q, then reopen)
