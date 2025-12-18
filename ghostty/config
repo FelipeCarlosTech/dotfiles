@@ -58,5 +58,10 @@ window-height = 70
 # Performance
 macos-option-as-alt = true
 
-# Keybindings - Clear all default Ghostty keybindings to let Zellij handle everything
-keybind = clear
+# Keybindings - Unbind Alt combinations that conflict with Zellij (keep Cmd shortcuts)
+keybind = alt+left=unbind
+keybind = alt+right=unbind
+keybind = alt+up=unbind
+keybind = alt+down=unbind
+keybind = alt+f=unbind
+keybind = alt+n=unbind
