@@ -5,3 +5,6 @@ local opt = vim.opt
 
 opt.scrolloff = 8
 opt.linebreak = true
+
+-- Spell checker con inglés y español
+opt.spelllang = { "en", "es" }

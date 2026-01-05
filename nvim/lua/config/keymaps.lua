@@ -5,6 +5,16 @@
 -- Redefine Ctrl+s to save with the custom function
 vim.api.nvim_set_keymap("n", "<C-s>", ":lua SaveFile()<CR>", { noremap = true, silent = true })
 
+-- Toggle spell checker (activar/desactivar corrector ortográfico)
+vim.keymap.set("n", "<leader>us", function()
+  vim.opt.spell = not vim.opt.spell:get()
+  if vim.opt.spell:get() then
+    vim.notify("Spell checker enabled")
+  else
+    vim.notify("Spell checker disabled")
+  end
+end, { desc = "Toggle Spell Checker" })
+
 -- Custom save function
 function SaveFile()
   -- Check if a buffer with a file is open
