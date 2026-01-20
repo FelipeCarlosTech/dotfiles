@@ -98,7 +98,7 @@ elif [ "$INSTALL_TERMINAL" = "alacritty" ]; then
 fi
 
 # Install other tools
-brew install zellij neovim zoxide fzf starship 2>/dev/null || true
+brew install zellij neovim zoxide fzf starship lazygit 2>/dev/null || true
 echo ""
 
 # Create symlinks
