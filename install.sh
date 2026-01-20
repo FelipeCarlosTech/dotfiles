@@ -3,7 +3,7 @@
 
 set -e
 
-DOTFILES_DIR="$HOME/code/felipecarlos/dotfiles"
+DOTFILES_DIR="$HOME/code/dotfiles"
 
 # Parse command line arguments
 INSTALL_TERMINAL=""
@@ -120,6 +120,20 @@ create_symlink "$DOTFILES_DIR/zellij" "$HOME/.config/zellij"
 create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
 create_symlink "$DOTFILES_DIR/bash/.bashrc" "$HOME/.bashrc"
+
+# Create .bash_profile if it doesn't exist (needed for login shells)
+if [ ! -f "$HOME/.bash_profile" ]; then
+  echo "→ .bash_profile"
+  cat > "$HOME/.bash_profile" << 'EOF'
+if [[ -f ~/.bashrc ]]; then
+  source ~/.bashrc
+fi
+EOF
+  echo "  ✓ Created"
+else
+  echo "→ .bash_profile"
+  echo "  ✓ Already exists"
+fi
 echo ""
 
 # Configure FZF keybindings
