@@ -7,18 +7,18 @@ return {
       explorer = {
         -- Sidebar file explorer (leader+e)
         hidden = true, -- Show hidden files (.env, .gitignore, etc)
-        ignored = false, -- Show git ignored files
+        ignored = true, -- Show git ignored files (node_modules, dist, etc)
       },
       picker = {
         -- File finder (leader+leader, leader+ff)
         sources = {
           files = {
             hidden = true,
-            ignored = false,
+            ignored = true,
           },
           explorer = {
             hidden = true,
-            ignored = false,
+            ignored = true,
           },
         },
       },
