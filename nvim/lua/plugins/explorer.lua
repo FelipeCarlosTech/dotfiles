@@ -1,14 +1,24 @@
--- File finder settings
+-- Snacks.nvim configuration (explorer + file picker)
+-- LazyVim uses snacks.nvim by default for both sidebar and file finder
 return {
-  -- Snacks.nvim: Show hidden files in file picker (leader+leader)
-  -- LazyVim 14.x uses snacks by default instead of telescope
   {
     "folke/snacks.nvim",
     opts = {
+      explorer = {
+        -- Sidebar file explorer (leader+e)
+        hidden = true, -- Show hidden files (.env, .gitignore, etc)
+        ignored = false, -- Show git ignored files
+      },
       picker = {
+        -- File finder (leader+leader, leader+ff)
         sources = {
           files = {
             hidden = true,
+            ignored = false,
+          },
+          explorer = {
+            hidden = true,
+            ignored = false,
           },
         },
       },
