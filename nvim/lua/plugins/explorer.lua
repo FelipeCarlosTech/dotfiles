@@ -6,10 +6,16 @@ return {
     opts = {
       filesystem = {
         filtered_items = {
-          visible = true,
-          hide_dotfiles = false,
-          hide_gitignored = false,
-          hide_hidden = false,
+          visible = false, -- When false, hidden files are completely shown (not dimmed)
+          hide_dotfiles = false, -- Show dotfiles (.gitignore, .env, etc)
+          hide_gitignored = false, -- Show git ignored files
+          hide_hidden = false, -- Show hidden files (Windows attribute)
+          hide_by_name = {
+            ".DS_Store",
+          },
+          never_show = {
+            ".DS_Store",
+          },
         },
       },
     },
