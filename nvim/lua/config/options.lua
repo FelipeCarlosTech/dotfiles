@@ -3,6 +3,9 @@
 -- Add any additional options here
 local opt = vim.opt
 
+-- Disable auto-format on save globally
+vim.g.autoformat = false
+
 opt.scrolloff = 8
 opt.linebreak = true
 
