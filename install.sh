@@ -143,6 +143,22 @@ if [ -f "$(brew --prefix)/opt/fzf/install" ]; then
   echo ""
 fi
 
+# Optional: Install JUnit Console Standalone for neotest-java
+echo "☕ JUnit Console Standalone (for running Java tests in Neovim)"
+read -p "   Install JUnit Console Standalone? [y/N] " -n 1 -r
+echo ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  JUNIT_JAR_DIR="$HOME/.local/share/nvim/neotest-java"
+  JUNIT_JAR_URL="https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.10.2/junit-platform-console-standalone-1.10.2.jar"
+  mkdir -p "$JUNIT_JAR_DIR"
+  echo "   Downloading JUnit Console Standalone..."
+  curl -L -o "$JUNIT_JAR_DIR/junit-platform-console-standalone.jar" "$JUNIT_JAR_URL" 2>/dev/null
+  echo "   ✓ Installed to $JUNIT_JAR_DIR"
+else
+  echo "   ✗ Skipped"
+fi
+echo ""
+
 # Success message
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "✅ Installation complete!"
