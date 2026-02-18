@@ -7,7 +7,7 @@ font-size = 16
 
 # Shell Configuration
 shell-integration = bash
-command = /opt/homebrew/bin/bash --login
+command = /opt/homebrew/bin/bash
 
 # Ayu Dark Theme Colors
 background = #0A0E14
