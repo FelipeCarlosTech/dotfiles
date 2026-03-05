@@ -50,10 +50,9 @@ window-padding-y = 5
 window-decoration = false
 window-theme = dark
 
-# Window size (almost full screen)
-# Large values will be clamped to screen size
-window-width = 240
-window-height = 70
+# Window size (centered rectangle, wider than tall)
+window-width = 180
+window-height = 45
 
 # Performance
 macos-option-as-alt = true
