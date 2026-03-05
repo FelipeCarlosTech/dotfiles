@@ -3,7 +3,7 @@
 
 # Font Configuration
 font-family = Google Sans Code NF
-font-size = 14
+font-size = 15
 
 # Shell Configuration
 shell-integration = bash
