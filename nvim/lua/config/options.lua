@@ -7,6 +7,7 @@ local opt = vim.opt
 vim.g.autoformat = false
 
 opt.scrolloff = 8
+opt.wrap = true
 opt.linebreak = true
 
 -- Spell checker con inglés y español
