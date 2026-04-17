@@ -99,6 +99,9 @@ fi
 
 # Install other tools
 brew install zellij neovim zoxide fzf starship lazygit node ripgrep fd 2>/dev/null || true
+
+# Install Zed editor
+brew install --cask zed 2>/dev/null || true
 echo ""
 
 # Create symlinks
@@ -120,6 +123,7 @@ create_symlink "$DOTFILES_DIR/zellij" "$HOME/.config/zellij"
 create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
 create_symlink "$DOTFILES_DIR/bash/.bashrc" "$HOME/.bashrc"
+create_symlink "$DOTFILES_DIR/zed/settings.json" "$HOME/.config/zed/settings.json"
 
 # Create .bash_profile if it doesn't exist (needed for login shells)
 if [ ! -f "$HOME/.bash_profile" ]; then
@@ -169,6 +173,10 @@ echo "      brew tap homebrew/cask-fonts"
 echo "      brew install font-google-sans-code-nerd-font"
 echo "   2. Restart your terminal"
 echo "   3. Open Neovim - plugins will auto-install"
+echo "   4. Open Zed and install these extensions manually:"
+echo "      • Theme: Catppuccin Mocha (Blur) [Heavy]"
+echo "      • Icons: Material Icon Theme"
+echo "      (cmd+shift+p → 'zed: extensions')"
 echo ""
 echo "💡 Quick tips:"
 echo "   • Edit files in $DOTFILES_DIR - changes apply instantly"
