@@ -17,8 +17,20 @@ foreground = #B3B1AD
 cursor-color = #FFB454
 cursor-text = #0A0E14
 
-# Cursor Trail Effect (shader personalizado)
-custom-shader = shaders/cursor_trail.glsl
+# Cursor Shape & Blink
+# Bloque grueso (no la rayita delgada) + parpadeo activado.
+cursor-style = block
+# Blink nativo OFF: el shader 9-smearbreathe genera su propio blink sincronizado
+# con el breathe. Si usas otro efecto y quieres parpadeo, ponlo en true.
+cursor-style-blink = false
+# Evita que bash/programas cambien la forma del cursor a barra.
+shell-integration-features = no-cursor
+
+# Cursor FX — shader activo seleccionable con el comando `cfx` (ej: cfx bloom).
+# active_cursor.glsl es un symlink a uno de shaders/effects/*.glsl
+custom-shader = shaders/active_cursor.glsl
+# Anima siempre: necesario para los fades/pulsos de los efectos.
+custom-shader-animation = always
 
 # Selection Colors
 selection-background = #253340
@@ -57,10 +69,28 @@ window-height = 45
 # Performance
 macos-option-as-alt = true
 
-# Keybindings - Unbind Alt combinations that conflict with Zellij (keep Cmd shortcuts)
-keybind = alt+left=unbind
-keybind = alt+right=unbind
-keybind = alt+up=unbind
-keybind = alt+down=unbind
-keybind = alt+f=unbind
-keybind = alt+n=unbind
+# ============================================================
+# Keybindings — Setup Ghostty-only (reemplazo de Zellij)
+# ============================================================
+# Splits (paneles) — cmd+d nuevo split derecha, cmd+shift+d abajo
+keybind = cmd+d=new_split:right
+keybind = cmd+shift+d=new_split:down
+# Navegación entre splits estilo vim (hjkl)
+keybind = cmd+alt+h=goto_split:left
+keybind = cmd+alt+j=goto_split:down
+keybind = cmd+alt+k=goto_split:up
+keybind = cmd+alt+l=goto_split:right
+# Zoom (fullscreen del split activo) y cerrar
+keybind = cmd+shift+enter=toggle_split_zoom
+keybind = cmd+w=close_surface
+# Igualar tamaño de todos los splits
+keybind = cmd+ctrl+r=equalize_splits
+
+# Tabs (pestañas)
+keybind = cmd+t=new_tab
+keybind = cmd+shift+l=next_tab
+keybind = cmd+shift+h=previous_tab
+# (cmd+1..9 para saltar a una pestaña ya viene por defecto en Ghostty)
+
+# Nota: ya no hace falta desvincular alt+hjkl/arrows (eran para Zellij);
+# así alt queda libre para mover palabras en bash/readline.
