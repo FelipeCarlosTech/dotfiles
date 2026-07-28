@@ -178,7 +178,11 @@ Plugin documentation header style (use in `lua/plugins/` files):
    scripts/theme.sh" header. Change the theme file and re-run instead.
 5. **No CI/CD.** There are no GitHub Actions, Makefiles, or automated pipelines.
    Validation is manual — see the Testing commands above.
-6. **No Cursor/Copilot rules.** The only AI context file is `CLAUDE.md` (gitignored).
+6. **AI context files.** `AGENTS.md` (this file) is the public, tool-agnostic
+   reference. `CLAUDE.md` is Claude-specific and is **tracked**, despite being
+   listed in `.gitignore` — the entry was added after the file was already
+   committed, so it has no effect. Run `git rm --cached CLAUDE.md` to actually
+   untrack it. There are no Cursor/Copilot rule files.
 7. **Bilingual comments.** Code comments and user-facing messages may be in English
    or Spanish. Follow the existing pattern in each file.
 
