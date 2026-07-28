@@ -45,7 +45,7 @@ float ease(float x) { return pow(1.0 - x, 3.0); }
 
 const float OPACITY = 0.6;
 const float DURATION = 0.18; // más largo que el trail -> estela más marcada
-const vec4 SMEAR_COLOR = vec4(1.0, 0.706, 0.329, 1.0); // Ayu ámbar
+const vec4 SMEAR_COLOR = vec4(1.0, 0.706, 0.329, 1.0); // @theme:accent
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     fragColor = texture(iChannel0, fragCoord.xy / iResolution.xy);

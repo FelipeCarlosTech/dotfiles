@@ -46,7 +46,7 @@ float ease(float x) { return pow(1.0 - x, 3.0); }
 
 const float OPACITY = 0.4;
 const float DURATION = 0.1;
-const vec3 GLOW_COLOR = vec3(1.0, 0.706, 0.329);
+const vec3 GLOW_COLOR = vec3(1.0, 0.706, 0.329); // @theme:accent
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     fragColor = texture(iChannel0, fragCoord.xy / iResolution.xy);

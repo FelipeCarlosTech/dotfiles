@@ -42,19 +42,13 @@ alias ll='ls -alF -G'
 alias la='ls -A -G'
 alias l='ls -CF -G'
 alias grep='grep --color=auto'
-alias zda='zellij da -y'
 alias k='kubectl'
-# Cambiar efecto de cursor de Ghostty (cfx | cfx <n|nombre>)
-alias cfx="$HOME/code/felipecarlos/dotfiles/scripts/cursor-fx.sh"
 
-# Iniciar Zellij automáticamente
-# DESACTIVADO 2026-06-27: probando setup "Ghostty solo" (splits/tabs nativos).
-# Para revolver a Zellij, descomenta este bloque.
-# if command -v zellij >/dev/null 2>&1; then
-#   if [[ -z "$ZELLIJ" && -z "$VSCODE_TERM_PROFILE" ]]; then
-#     zellij attach main || zellij -s main
-#     # Al salir de Zellij (p.ej. Ctrl+d en el último panel), cerrar la ventana
-#     # limpiamente en vez de caer en un shell externo con la pantalla en negro.
-#     exit
-#   fi
-# fi
+# Dotfiles
+DOTFILES="$HOME/code/felipecarlos/dotfiles"
+# Cambiar el tema de TODAS las herramientas (theme | theme <nombre>)
+alias theme="$DOTFILES/scripts/theme.sh"
+# Cambiar efecto de cursor de Ghostty (cfx | cfx <n|nombre>)
+alias cfx="$DOTFILES/scripts/cursor-fx.sh"
+# Armar 4 paneles en cruz en la ventana actual de Ghostty
+alias cross="$DOTFILES/scripts/ghostty-cross.sh"

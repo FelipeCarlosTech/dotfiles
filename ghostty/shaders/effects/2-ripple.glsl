@@ -1,7 +1,7 @@
 // 2-ripple — onda que se expande desde el cursor al moverte
 vec2 N(vec2 v, float p) { return (v * 2.0 - iResolution.xy * p) / iResolution.y; }
 
-const vec3 COL = vec3(1.0, 0.706, 0.329); // Ayu ámbar #FFB454
+const vec3 COL = vec3(1.0, 0.706, 0.329); // @theme:accent
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec4 base = texture(iChannel0, fragCoord.xy / iResolution.xy);

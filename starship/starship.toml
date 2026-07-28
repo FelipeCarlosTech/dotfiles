@@ -1,5 +1,10 @@
 "$schema" = "https://starship.rs/config-schema.json"
 
+# Colors are referenced by SEMANTIC palette key only — never by hex.
+# Switching themes rewrites the single `palette = "..."` line below, which is
+# done by scripts/theme.sh from themes/<name>.sh. Adding a theme means adding a
+# matching [palettes.<name>] block here with the same set of keys.
+
 format = """\
 ($directory)\
 $os\
@@ -26,159 +31,153 @@ add_newline = true
 # Command timeout
 command_timeout = 3600000
 
-# ayu-dark color settings
-palette = "ayu_dark"
+# Active palette — GENERATED LINE, rewritten by scripts/theme.sh
+palette = "tokyonight_night"
 
 [fill]
 symbol = ' '
 
+# ---------------------------------------------------------------------------
+# Palettes — every palette MUST define the same keys.
+# ---------------------------------------------------------------------------
+
+[palettes.tokyonight_night]
+bg = "#1a1b26"
+fg = "#c0caf5"
+muted = "#565f89"
+red = "#f7768e"
+green = "#9ece6a"
+yellow = "#e0af68"
+blue = "#7aa2f7"
+magenta = "#bb9af7"
+cyan = "#7dcfff"
+accent = "#e0af68"
+
+[palettes.tokyonight_storm]
+bg = "#24283b"
+fg = "#c0caf5"
+muted = "#565f89"
+red = "#f7768e"
+green = "#9ece6a"
+yellow = "#e0af68"
+blue = "#7aa2f7"
+magenta = "#bb9af7"
+cyan = "#7dcfff"
+accent = "#e0af68"
+
 [palettes.ayu_dark]
+bg = "#0A0E14"
+fg = "#B3B1AD"
+muted = "#686868"
 red = "#F07178"
 green = "#C2D94C"
-purple = "#FFEE99"
 yellow = "#FFB454"
 blue = "#59C2FF"
+magenta = "#FFEE99"
 cyan = "#95E6CB"
-os_bg = "#B3B1AD"
-os_fg = "#0A0E14"
-dir_bg = "#C2D94C"
-dir_fg = "#0A0E14"
-git_bg = "#FFB454"
-git_fg = "#0A0E14"
-lang_bg = "#59C2FF"
-lang_fg = "#0A0E14"
-arrow = "#C2D94C"      # ayu green
-os = "#B3B1AD"         # ayu foreground
-directory = "#FFEE99"  # ayu purple/magenta
-git = "#FFB454"        # ayu yellow
-duration = "#95E6CB"   # ayu cyan
-text_color = "#C2D94C" # ayu green
-text_light = "#0A0E14" # ayu background
+accent = "#FFB454"
 
-# carbonfox color settings (BACKUP - Descomenta para volver a carbonfox)
-# palette = "carbonfox"
-#
-# [palettes.carbonfox]
-# red = "#F07178"
-# green = "#25be6a"
-# purple = "#be95ff"
-# yellow = "#08bdba"
-# os_bg = "#7b7c7e"
-# os_fg = "#0c0c0c"
-# dir_bg = "#25be6a"
-# dir_fg = "#161616"
-# git_bg = "#08bdba"
-# git_fg = "#252525"
-# lang_bg = "#59C2FF"
-# lang_fg = "#353535"
-# arrow = "#25be6a"      # carbonfox green
-# os = "#7b7c7e"         # carbonfox os_bg
-# directory = "#be95ff"
-# git = "#08bdba"        # carbonfox yellow
-# duration = "#be95ff"   # carbonfox purple
-# text_color = "#25be6a" # carbonfox green
-# text_light = "#161616" # carbonfox dir_fg
+# ---------------------------------------------------------------------------
+# Modules
+# ---------------------------------------------------------------------------
 
-# Pink FC icon for the prompt
 [character]
-success_symbol = "[ ](fg:#59C2FF)" # FC in carbonfox green
-error_symbol = "[ ](fg:#F07178)"      # FC in carbonfox red if there is an error
+success_symbol = "[ ](fg:blue)"
+error_symbol = "[ ](fg:red)"
 
-# User settings
 [username]
-style_user = 'bold fg:os'
+style_user = 'bold fg:fg'
 style_root = 'bold fg:red'
-format = '[  $user](fg:$style) ' # FC before the username
+format = '[  $user](fg:$style) '
 disabled = false
 show_always = true
 
-# Directory settings
 [directory]
 format = "[$path](bold $style)[$read_only]($read_only_style) "
 truncation_length = 2
-style = "fg:directory"
-read_only_style = "fg:directory"
-before_repo_root_style = "fg:directory"
+style = "fg:magenta"
+read_only_style = "fg:magenta"
+before_repo_root_style = "fg:muted"
 truncation_symbol = "…/"
 truncate_to_repo = true
-read_only = "  "
+read_only = "  "
 
 [directory.substitutions]
 "Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = " "
-"Pictures" = " "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
 
 [cmd_duration]
-format = " took [ $duration]($style) "
-style = "bold fg:purple"
+format = " took [ $duration]($style) "
+style = "bold fg:magenta"
 min_time = 500
 
 [git_branch]
 format = "󰧂 [$symbol$branch]($style) "
-style = "bold fg:git"
-symbol = " "
+style = "bold fg:yellow"
+symbol = " "
 
 [git_status]
 format = '[$all_status$ahead_behind ]($style)'
-style = "fg:text_color"
+style = "fg:green"
 
 [docker_context]
 disabled = true
-symbol = " "
+symbol = " "
 
 [python]
 disabled = false
-format = '[${symbol}${pyenv_prefix}(${version})( \($virtualenv\))](fg:#59C2FF)($style)'
-symbol = " "
+format = '[${symbol}${pyenv_prefix}(${version})( \($virtualenv\))](fg:blue)($style)'
+symbol = " "
 version_format = "${raw}"
 
 [java]
-format = '[[ $symbol ($version) ](fg:#F07178)]($style)'
+format = '[[ $symbol ($version) ](fg:red)]($style)'
 version_format = "${raw}"
-symbol = " "
+symbol = " "
 disabled = false
 
 [c]
-format = '[[ $symbol ($version) ](fg:#08bdba)]($style)'
-symbol = " "
+format = '[[ $symbol ($version) ](fg:cyan)]($style)'
+symbol = " "
 version_format = "${raw}"
 disabled = false
 
 [zig]
-format = '[[ $symbol ($version) ](fg:#be95ff)]($style)'
+format = '[[ $symbol ($version) ](fg:magenta)]($style)'
 version_format = "${raw}"
 disabled = false
 
 [bun]
 version_format = "${raw}"
-format = '[[ $symbol ($version) ](fg:#25be6a)]($style)'
+format = '[[ $symbol ($version) ](fg:green)]($style)'
 disabled = false
 
 [nodejs]
-symbol = ""
-format = '[[ $symbol ($version) ](fg:#25be6a)]($style)'
+symbol = ""
+format = '[[ $symbol ($version) ](fg:green)]($style)'
 
 [rust]
-symbol = ""
-format = '[[ $symbol ($version) ](fg:#F07178)]($style)'
+symbol = ""
+format = '[[ $symbol ($version) ](fg:red)]($style)'
 
 [golang]
-symbol = ""
-format = '[[ $symbol ($version) ](fg:#08bdba)]($style)'
+symbol = ""
+format = '[[ $symbol ($version) ](fg:cyan)]($style)'
 
 [php]
-symbol = ""
-format = '[[ $symbol ($version) ](fg:#be95ff)]($style)'
+symbol = ""
+format = '[[ $symbol ($version) ](fg:magenta)]($style)'
 
 [time]
 disabled = true
-time_format = "%R"                           # Hour:Minute Format
-format = '[[   $time ](fg:#08bdba)]($style)'
+time_format = "%R"
+format = '[[   $time ](fg:cyan)]($style)'
 
 [os]
 disabled = true
-style = "fg:os"
+style = "fg:fg"
 
 [os.symbols]
 Windows = "󰍲"
@@ -202,4 +201,4 @@ Redhat = "󱄛"
 RedHatEnterprise = "󱄛"
 
 [conda]
-format = '[[ $symbol ($version) ](fg:#08bdba)]($style)'
+format = '[[ $symbol ($version) ](fg:cyan)]($style)'

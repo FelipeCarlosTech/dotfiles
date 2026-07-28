@@ -1,10 +1,10 @@
 # 🚀 Modern macOS Terminal Setup
 
-A complete, production-ready dotfiles configuration for macOS developers featuring **Ghostty**, **Zellij**, **LazyVim**, and **atuin** with a beautiful **Ayu Dark** theme.
+A complete, production-ready dotfiles configuration for macOS developers featuring **Ghostty**, **LazyVim**, and **Starship** — with a **switchable theme system** (Tokyo Night by default).
 
 [![macOS](https://img.shields.io/badge/macOS-Sequoia+-blue.svg)](https://www.apple.com/macos/)
 [![Shell](https://img.shields.io/badge/Shell-Bash_5.2+-green.svg)](https://www.gnu.org/software/bash/)
-[![Theme](https://img.shields.io/badge/Theme-Ayu_Dark-orange.svg)](https://github.com/ayu-theme)
+[![Theme](https://img.shields.io/badge/Theme-Tokyo_Night-7aa2f7.svg)](https://github.com/folke/tokyonight.nvim)
 
 ## ✨ What's Inside
 
@@ -12,44 +12,59 @@ A complete, production-ready dotfiles configuration for macOS developers featuri
 
 | Component | Tool | Purpose |
 |-----------|------|---------|
-| **Terminal** | [Ghostty](https://ghostty.org) / [Alacritty](https://alacritty.org) | GPU-accelerated terminal with custom shaders |
+| **Terminal** | [Ghostty](https://ghostty.org) | GPU-accelerated terminal with custom shaders, native splits & tabs |
 | **Shell** | [Bash 5.2+](https://www.gnu.org/software/bash/) | Modern Bash shell (not default macOS 3.2) |
-| **Multiplexer** | [Zellij](https://zellij.dev) | Modern terminal workspace manager |
 | **Editor** | [Neovim](https://neovim.io) + [LazyVim](https://www.lazyvim.org) | Blazingly fast IDE-like experience |
+| **Editor (GUI)** | [Zed](https://zed.dev) | Fast native editor with vim mode |
 | **Prompt** | [Starship](https://starship.rs) | Fast, customizable shell prompt |
 | **History** | [fzf](https://github.com/junegunn/fzf) | Fuzzy history search with Ctrl+R |
 | **Navigation** | [zoxide](https://github.com/ajeetdsouza/zoxide) | Smarter cd command |
 
+> **No multiplexer.** Zellij was removed in favor of Ghostty's native splits and
+> tabs. One less layer, one less config, native performance.
+
 ### 🎨 Theme & Appearance
 
-- **Color Scheme**: Ayu Dark (consistent across all tools)
-- **Font**: Google Sans Code Nerd Font (size 18)
-- **Cursor**: Animated trail effect with Ayu Dark yellow
+- **Themes**: Tokyo Night (Night / Storm) and Ayu Dark — switch with one command
+- **Font**: Google Sans Code Nerd Font (size 15)
+- **Cursor**: 10 selectable animated shader effects, auto-tinted to the active theme
 - **Icons**: Full Nerd Font icon support
 
 ## 🌟 Key Features
 
-### ⚡ Ghostty Terminal
-- Custom **cursor trail shader** (animated motion blur effect)
-- Native macOS performance with GPU acceleration
-- Ayu Dark theme with vibrant yellow cursor
-- Shell integration with inline completions
+### 🎨 One-Command Theming
 
-### 🪟 Zellij Workspace
-- **Auto-starts** with terminal (persistent sessions)
-- Vim-style navigation (`hjkl`)
-- Custom keybindings with `Ctrl+g` unlock
-- Ayu Dark theme with custom status bar
-- Tabs, panes, and floating windows
+Every tool's colors come from a **single file per theme**. No more hunting hex codes
+across five configs:
+
+```bash
+theme                     # List themes, show the active one
+theme tokyonight-night    # Apply everywhere: Ghostty, Starship, Neovim, Zed, shaders
+theme ayu-dark            # Switch back instantly
+```
+
+```
+themes/<name>.sh   ──►   scripts/theme.sh   ──►   Ghostty + shaders + Starship + Neovim + Zed
+   (source of truth)         (one command)              (all in sync, always)
+```
+
+### ⚡ Ghostty Terminal
+
+- **10 cursor shader effects** — smear, ripple, bloom, ghost, fire, rainbow, breathe…
+- Switch effects live: `cfx bloom` (the shader is re-tinted to your theme automatically)
+- Native splits and tabs with vim-style navigation
+- GPU acceleration and shell integration
 
 ### 🎯 LazyVim Configuration
+
 - Pre-configured IDE experience out of the box
-- Ayu Dark colorscheme
+- Colorscheme driven by the central theme system
 - LSP, treesitter, telescope, and more
 - Custom keymaps (Ctrl+s to save)
 - LazyGit integration
 
 ### 🔄 Symlink Architecture
+
 - **Repository is the source of truth**
 - Changes apply instantly (no sync needed)
 - `git pull` = instant config update across machines
@@ -58,6 +73,7 @@ A complete, production-ready dotfiles configuration for macOS developers featuri
 ## 📦 Installation
 
 ### Prerequisites
+
 - macOS Sequoia+ (or any recent macOS version)
 - [Homebrew](https://brew.sh) (will be installed if missing)
 - Git
@@ -65,102 +81,114 @@ A complete, production-ready dotfiles configuration for macOS developers featuri
 ### Quick Start
 
 ```bash
-# 1. Clone this repository
+# 1. Clone this repository (any path works — the installer resolves its own location)
 git clone https://github.com/FelipeCarlosTech/dotfiles.git ~/code/felipecarlos/dotfiles
 cd ~/code/felipecarlos/dotfiles
 
-# 2. Make install script executable
-chmod +x install.sh
-
-# 3. Choose your installation:
-
-# Install both terminals (Ghostty + Alacritty)
+# 2. Install
 ./install.sh
 
-# OR install only Ghostty (recommended)
-./install.sh --ghostty
-
-# OR install only Alacritty (no atuin)
-./install.sh --alacritty
+# Or pick a theme up front:
+./install.sh --theme tokyonight-storm
+./install.sh --theme ayu-dark
 ```
 
 ### What Gets Installed
 
-The installation script automatically installs:
+✅ **Applications** — Ghostty, Neovim, Zed
+✅ **CLI Utilities** — Starship, zoxide, fzf, lazygit, ripgrep, fd, node, bash
+✅ **Configuration** — all configs symlinked, theme generated and applied
 
-✅ **Terminal Emulators**
-- Ghostty (modern, GPU-accelerated)
-- Alacritty (alternative, battle-tested)
-
-✅ **Development Tools**
-- Zellij (terminal multiplexer)
-- Neovim (text editor)
-
-✅ **CLI Utilities**
-- Starship (prompt)
-- zoxide (smart cd)
-- fzf (fuzzy finder)
-
-✅ **Configuration**
-- All config files symlinked
-- Ayu Dark theme applied everywhere
-- Custom cursor trail shader (Ghostty)
-
-### Manual Step (Required)
-
-Install the Nerd Font for icons:
+### Manual Steps (Required)
 
 ```bash
-brew tap homebrew/cask-fonts
+# Nerd Font for icons
 brew install font-google-sans-code-nerd-font
 ```
 
+In Zed, install these extensions (`cmd+shift+p` → `zed: extensions`):
+- **Theme**: Tokyo Night (or Ayu, if you use `ayu-dark`)
+- **Icons**: Material Icon Theme
+
 ### Post-Installation
 
-1. **Restart your terminal** (or open Ghostty/Alacritty)
-2. **First Neovim launch**: Run `nvim` - plugins will auto-install
+1. **Restart Ghostty**
+2. **First Neovim launch**: run `nvim` — plugins auto-install
 3. **Done!** 🎉
 
 ## 🎮 Usage Guide
 
-### Essential Keyboard Shortcuts
+### Ghostty Splits & Tabs
 
-#### Zellij (Terminal Multiplexer)
 ```
-Ctrl+g          # Unlock/Enter normal mode
-Press t         # Tab mode (create, switch, rename tabs)
-Press p         # Pane mode (split, navigate, resize)
-Press 1-9       # Jump to specific tab
+cmd+d              # Split right
+cmd+shift+d        # Split down
+cmd+alt+h/j/k/l    # Move focus between splits (vim-style)
+cmd+ctrl+h/j/k/l   # Resize the focused split
+cmd+ctrl+r         # Equalize all splits
+cmd+shift+enter    # Zoom the focused split
+cmd+w              # Close the split
+
+cmd+t              # New tab
+cmd+shift+h/l      # Previous / next tab
+cmd+1..9           # Jump to a tab
 ```
 
-#### fzf (Fuzzy Finder)
+#### 4 panes in a cross (2×2)
+
+Ghostty maps one shortcut to exactly one action and has no layout files, so the
+cross is four keystrokes:
+
+```
+cmd+d  →  cmd+shift+d  →  cmd+alt+h  →  cmd+shift+d
+```
+
+Then `cmd+ctrl+r` to even them out. Or do it in one shot:
+
+```bash
+cross              # Builds the 2x2 layout in the current window
+```
+
+> `cross` drives those keystrokes through System Events, so it needs Accessibility
+> permission (System Settings → Privacy & Security → Accessibility). The script
+> tells you if the permission is missing instead of failing silently.
+
+### Theme & Cursor
+
+```bash
+theme                      # List themes, show active
+theme tokyonight-night     # Apply a theme everywhere
+theme tokyonight-storm
+theme ayu-dark
+theme --reapply            # Regenerate artifacts for the active theme
+
+cfx                        # List cursor effects, show active
+cfx bloom                  # Switch effect (auto-tinted to the theme)
+cfx 5                      # By number
+```
+
+After either, press `Cmd+Shift+,` in Ghostty to reload.
+
+### fzf (Fuzzy Finder)
+
 ```
 Ctrl+R          # Search command history
-Up Arrow        # Previous command in history
 Ctrl+T          # Find files
 Alt+C           # Change directory interactively
 ```
 
-#### zoxide (Smart Navigation)
+### zoxide (Smart Navigation)
+
 ```bash
 z dotfiles      # Jump to any directory containing "dotfiles"
-z ~/code        # Jump to ~/code
 zi              # Interactive directory picker
 ```
 
-### Common Commands
+### Maintenance
 
 ```bash
-# Zellij session management
-zellij ls                    # List all sessions
-zellij attach main           # Attach to main session
-zda                          # Delete all sessions (alias)
-
-# Config verification
-./scripts/sync.sh status     # Check symlink health
+./scripts/sync.sh status     # Symlinks, active theme, generated artifacts
 ./scripts/sync.sh git-status # Quick git status
-
-# Manual backup (optional)
 ./scripts/sync.sh backup     # Create timestamped backup
 ```
 
@@ -170,129 +198,142 @@ zda                          # Delete all sessions (alias)
 
 ```
 dotfiles/
-├── ghostty/              # Primary terminal config
-│   ├── config           # Main configuration
-│   └── shaders/         # Custom GLSL shaders
-├── alacritty/           # Alternative terminal config
-├── bash/                # Shell configuration
-├── starship/            # Prompt configuration
-├── zellij/              # Multiplexer config
-│   ├── config.kdl
-│   └── layouts/
-└── nvim/                # Neovim configuration
-    └── lua/
-        ├── config/
-        └── plugins/
+├── themes/               # ★ SOURCE OF TRUTH — one file per theme
+│   ├── tokyonight-night.sh
+│   ├── tokyonight-storm.sh
+│   └── ayu-dark.sh
+├── ghostty/              # Terminal config
+│   ├── config            # Settings + keybindings (no colors)
+│   ├── theme.conf        # GENERATED colors
+│   └── shaders/
+│       ├── active_cursor.glsl   # GENERATED (gitignored)
+│       └── effects/             # 10 cursor effect templates
+├── bash/                 # Shell configuration
+├── starship/             # Prompt (all palettes live here)
+├── zed/                  # Zed editor settings
+├── nvim/                 # Neovim configuration
+│   └── lua/
+│       ├── config/
+│       │   └── theme.lua        # GENERATED colorscheme + lualine
+│       └── plugins/
+├── scripts/
+│   ├── theme.sh          # Apply a theme across every tool
+│   ├── cursor-fx.sh      # Switch cursor effect
+│   ├── ghostty-cross.sh  # Build the 2x2 split layout
+│   ├── sync.sh           # Maintenance & verification
+│   └── prepare.sh        # Pre-install config capture
+├── .theme                # Active theme marker
+└── .cursor-fx            # Active cursor effect marker
 ```
+
+Files marked **GENERATED** are written by `scripts/theme.sh`. Don't edit them —
+edit the theme file and re-run.
 
 ### Customization Examples
 
-#### Change Font Size
+#### Change font size
+
 Edit `ghostty/config`:
 ```
-font-size = 18  # Change to your preference
+font-size = 15
 ```
 
-Or `alacritty/alacritty.toml`:
-```toml
-size = 18
-```
+#### Change the cursor / accent color
 
-#### Modify Cursor Trail Color
+Edit the active theme file, e.g. `themes/tokyonight-night.sh`:
+```bash
+CURSOR="#e0af68"   # try "#7aa2f7" (blue) or "#bb9af7" (magenta)
+```
+Then `theme --reapply`. This recolors the Ghostty cursor **and** the shader effect.
+
+#### Change terminal window size
+
 Edit `ghostty/config`:
 ```
-cursor-color = #FFB454  # Any hex color
+window-width = 180   # Characters wide
+window-height = 45   # Lines tall
 ```
 
-#### Change Terminal Window Size
-Edit `ghostty/config`:
-```
-window-width = 240   # Characters wide
-window-height = 70   # Lines tall
-```
+## 🎨 Theme System
+
+### Adding your own theme
+
+1. Copy an existing file in `themes/` and fill in every variable.
+2. Add a matching `[palettes.<name>]` block in `starship/starship.toml`, using the
+   same keys as the others (`bg`, `fg`, `muted`, `red`, `green`, `yellow`, `blue`,
+   `magenta`, `cyan`, `accent`).
+3. Add the Neovim colorscheme plugin to `nvim/lua/plugins/colorscheme.lua`.
+4. Run `theme <your-name>`.
+
+`theme.sh` fails loudly if a theme file is missing any required variable, so a
+half-finished theme can never silently leave a tool on the old colors.
+
+### Tokyo Night (Night) palette
+
+| Element | Hex |
+|---------|-----|
+| Background | `#1a1b26` |
+| Foreground | `#c0caf5` |
+| Cursor / accent | `#e0af68` |
+| Selection | `#283457` |
+| Red | `#f7768e` |
+| Green | `#9ece6a` |
+| Blue | `#7aa2f7` |
+| Magenta | `#bb9af7` |
+| Cyan | `#7dcfff` |
 
 ## 🔄 Syncing Across Machines
 
-### Making Changes
-
 ```bash
-# 1. Edit any config file in the repo
-vim ghostty/config
+# Make changes
+vim ghostty/config          # applies instantly via symlink
+git add . && git commit -m "Update cursor color" && git push
 
-# 2. Changes apply instantly (symlinked)
-# Test in your terminal
-
-# 3. Commit and push
-git add .
-git commit -m "Update cursor color"
-git push
+# On another Mac
+cd ~/code/felipecarlos/dotfiles && git pull
+./scripts/theme.sh --reapply   # regenerate the gitignored shader
 ```
-
-### Syncing to Another Mac
-
-```bash
-# On your new Mac (after initial setup):
-cd ~/code/felipecarlos/dotfiles
-git pull
-
-# Changes apply instantly via symlinks!
-```
-
-## 🎨 Theme Customization
-
-All configurations use **Ayu Dark** theme with these colors:
-
-| Element | Color | Hex |
-|---------|-------|-----|
-| Background | Dark Charcoal | `#0A0E14` |
-| Foreground | Light Gray | `#B3B1AD` |
-| Cursor | Bright Yellow | `#FFB454` |
-| Selection | Dark Blue | `#253340` |
-| Red | Coral | `#EA6C73` |
-| Green | Lime | `#91B362` |
-| Yellow | Orange | `#F9AF4F` |
-| Blue | Sky Blue | `#53BDFA` |
-
-### Switching Themes
-
-Want to use a different theme? Update these files:
-- `ghostty/config` - Terminal colors
-- `alacritty/alacritty.toml` - Terminal colors
-- `starship/starship.toml` - Prompt palette
-- `zellij/config.kdl` - Multiplexer theme
-- `nvim/lua/plugins/colorscheme.lua` - Editor theme
 
 ## 🛠️ Troubleshooting
 
 ### Terminal not loading config
-```bash
-# Check symlink status
-./scripts/sync.sh status
 
-# Verify symlinks point to repo
-ls -la ~/.config/ghostty
-# Should show: ~/.config/ghostty -> ~/code/felipecarlos/dotfiles/ghostty
+```bash
+./scripts/sync.sh status
+ghostty +validate-config --config-file="$PWD/ghostty/config"
 ```
 
-### Cursor trail not showing
-- **Fix**: Restart Ghostty completely (Cmd+Q, then reopen)
-- **Check**: Verify `ghostty/shaders/cursor_trail.glsl` exists
+### Colors look wrong or half-applied
+
+```bash
+theme --reapply     # regenerates every artifact from the active theme
+```
+Then `Cmd+Shift+,` in Ghostty and restart Neovim.
+
+### Cursor effect not showing
+
+- Restart Ghostty completely (`Cmd+Q`, then reopen), or press `Cmd+Shift+,`
+- Verify `ghostty/shaders/active_cursor.glsl` exists — it's generated and
+  gitignored, so a fresh clone needs `theme --reapply`
+
+### `cross` does nothing
+
+macOS is blocking synthetic keystrokes. Grant Accessibility permission in
+System Settings → Privacy & Security → Accessibility, or press the four
+shortcuts by hand.
 
 ### Icons not displaying
-- **Fix**: Install the Nerd Font:
-  ```bash
-  brew tap homebrew/cask-fonts
-  brew install font-google-sans-code-nerd-font
-  ```
-- **Fix**: Restart your terminal
 
-### Zellij not auto-starting
-- **Check**: `.bashrc` line 57-62 (auto-start logic)
-- **Fix**: Run `source ~/.bashrc`
+```bash
+brew install font-google-sans-code-nerd-font
+```
+Then restart your terminal.
 
 ### Commands not found
-- **Fix**: Source bashrc: `source ~/.bashrc`
-- **Fix**: Or restart your terminal
+
+```bash
+source ~/.bashrc    # or restart your terminal
+```
 
 ## 🤝 Contributing
 
@@ -308,8 +349,9 @@ This configuration is free and open source. Feel free to use, modify, and distri
 ## 🙏 Credits
 
 Inspired by and using:
-- [Ayu Theme](https://github.com/ayu-theme/ayu-colors) - Color scheme
-- [Gentleman.Dots](https://github.com/Gentleman-Programming/Gentleman.Dots) - Cursor trail shader
+- [Tokyo Night](https://github.com/folke/tokyonight.nvim) - Default color scheme
+- [Ayu Theme](https://github.com/ayu-theme/ayu-colors) - Alternative color scheme
+- [Gentleman.Dots](https://github.com/Gentleman-Programming/Gentleman.Dots) - Cursor shader inspiration
 - [LazyVim](https://www.lazyvim.org) - Neovim configuration
 - The amazing open source community
 

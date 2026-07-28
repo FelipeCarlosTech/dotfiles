@@ -1,5 +1,9 @@
-# Ghostty Configuration - Ayu Dark Theme
+# Ghostty Configuration
 # Synced via dotfiles repo
+#
+# Los COLORES viven en theme.conf, que es GENERADO desde themes/<nombre>.sh por
+# scripts/theme.sh. Cambiá de tema con `theme <nombre>`; no toques colores acá.
+config-file = theme.conf
 
 # Font Configuration
 font-family = Google Sans Code NF
@@ -9,52 +13,21 @@ font-size = 15
 shell-integration = bash
 command = /opt/homebrew/bin/bash
 
-# Ayu Dark Theme Colors
-background = #0A0E14
-foreground = #B3B1AD
-
-# Cursor Colors (Ayu Dark Yellow for trail effect)
-cursor-color = #FFB454
-cursor-text = #0A0E14
-
 # Cursor Shape & Blink
-# Bloque grueso (no la rayita delgada) + parpadeo activado.
+# Bloque grueso (no la rayita delgada).
 cursor-style = block
 # Blink nativo OFF: el shader 9-smearbreathe genera su propio blink sincronizado
-# con el breathe. Si usas otro efecto y quieres parpadeo, ponlo en true.
+# con el breathe. Si usás otro efecto y querés parpadeo, ponelo en true.
 cursor-style-blink = false
 # Evita que bash/programas cambien la forma del cursor a barra.
 shell-integration-features = no-cursor
 
-# Cursor FX — shader activo seleccionable con el comando `cfx` (ej: cfx bloom).
-# active_cursor.glsl es un symlink a uno de shaders/effects/*.glsl
+# Cursor FX — efecto seleccionable con el comando `cfx` (ej: cfx bloom).
+# active_cursor.glsl es GENERADO por scripts/theme.sh a partir del efecto
+# elegido en shaders/effects/, tintado con el accent del tema activo.
 custom-shader = shaders/active_cursor.glsl
 # Anima siempre: necesario para los fades/pulsos de los efectos.
 custom-shader-animation = always
-
-# Selection Colors
-selection-background = #253340
-selection-foreground = #B3B1AD
-
-# Normal Colors (0-7)
-palette = 0=#01060E
-palette = 1=#EA6C73
-palette = 2=#91B362
-palette = 3=#F9AF4F
-palette = 4=#53BDFA
-palette = 5=#FAE994
-palette = 6=#90E1C6
-palette = 7=#C7C7C7
-
-# Bright Colors (8-15)
-palette = 8=#686868
-palette = 9=#F07178
-palette = 10=#C2D94C
-palette = 11=#FFB454
-palette = 12=#59C2FF
-palette = 13=#FFEE99
-palette = 14=#95E6CB
-palette = 15=#FFFFFF
 
 # Window Configuration
 window-padding-x = 10
@@ -85,6 +58,17 @@ keybind = cmd+shift+enter=toggle_split_zoom
 keybind = cmd+w=close_surface
 # Igualar tamaño de todos los splits
 keybind = cmd+ctrl+r=equalize_splits
+# Redimensionar el split activo
+keybind = cmd+ctrl+h=resize_split:left,20
+keybind = cmd+ctrl+j=resize_split:down,10
+keybind = cmd+ctrl+k=resize_split:up,10
+keybind = cmd+ctrl+l=resize_split:right,20
+
+# Layout en cruz (2x2): Ghostty mapea un keybind a UNA sola acción, así que no
+# existe un atajo único de layout. La receta de cuatro pulsaciones es:
+#   cmd+d  →  cmd+shift+d  →  cmd+alt+h  →  cmd+shift+d
+# y después cmd+ctrl+r para igualarlos. El comando `cross` hace lo mismo de una
+# sola vez (ver bash/.bashrc y scripts/ghostty-cross.sh).
 
 # Tabs (pestañas)
 keybind = cmd+t=new_tab

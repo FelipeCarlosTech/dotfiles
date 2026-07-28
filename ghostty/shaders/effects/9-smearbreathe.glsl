@@ -49,8 +49,8 @@ float ease(float x) { return pow(1.0 - x, 3.0); }
 // ---- Ajustes -------------------------------------------------------
 const float OPACITY      = 0.6;    // intensidad del smear
 const float DURATION     = 0.18;   // duración del smear al moverse
-const vec3  AMBER        = vec3(1.0, 0.706, 0.329); // Ayu #FFB454
-const vec3  BG           = vec3(0.0392, 0.0549, 0.0784); // background #0A0E14
+const vec3  ACCENT        = vec3(1.0, 0.706, 0.329); // @theme:accent
+const vec3  BG           = vec3(0.0392, 0.0549, 0.0784); // @theme:bg
 const float SETTLE       = 0.35;   // s que tarda en empezar el blink/breathe tras moverse
 const float BLINK_SPEED  = 4.4;    // velocidad del blink+breathe (un poco más lento, ~1.43s periodo)
 const float BREATHE_GLOW = 0.05;   // brillo del halo (casi imperceptible)
@@ -83,8 +83,8 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
     // --- SMEAR (al escribir / moverse) ---
     vec4 newColor = vec4(fragColor);
-    newColor = mix(newColor, vec4(AMBER, 1.0), antialising(sdfTrail));
-    newColor = mix(newColor, vec4(AMBER, 1.0), antialising(sdfCurrentCursor));
+    newColor = mix(newColor, vec4(ACCENT, 1.0), antialising(sdfTrail));
+    newColor = mix(newColor, vec4(ACCENT, 1.0), antialising(sdfCurrentCursor));
     newColor = mix(newColor, fragColor, step(sdfCurrentCursor, 0.0));
     newColor = mix(fragColor, newColor, OPACITY);
     fragColor = mix(fragColor, newColor, step(sdfCurrentCursor, easedProgress * lineLength));
@@ -101,5 +101,5 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     // Breathe del halo: mismo reloj -> pico cuando el bloque está "on"; brillo bajo
     float pulse = 0.5 + 0.5 * s;
     float halo = exp(-max(sdfCurrentCursor, 0.0) / 0.045) * step(0.0, sdfCurrentCursor);
-    fragColor.rgb += AMBER * halo * pulse * BREATHE_GLOW * idle;
+    fragColor.rgb += ACCENT * halo * pulse * BREATHE_GLOW * idle;
 }

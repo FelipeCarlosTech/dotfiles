@@ -1,280 +1,150 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working in this repository.
+
+> Code style, per-language conventions, and the full command reference live in
+> **`AGENTS.md`**. Read it before editing. This file carries only the essentials
+> plus the traps that are easy to fall into here.
 
 ## Repository Overview
 
-This is a personal dotfiles repository for a macOS CLI workflow using **Ghostty/Alacritty** + **Bash** + **Zellij** + **LazyVim**. The key architectural principle is **symlinks as source of truth** - the repository IS the live configuration, not just a backup.
+Personal macOS dotfiles for a **Ghostty + Bash + LazyVim + Starship + Zed** setup.
 
-## Architecture & Workflow
+The architectural principle is **symlinks as source of truth**: the repository IS
+the live configuration, not a backup. Files are symlinked into `~/.config/` and
+`~/`, so editing a file here changes the running system immediately, and editing
+through the symlink shows up in `git status`.
 
-The repository uses a bidirectional symlink approach:
-- Configuration files in this repo are symlinked to their system locations (`~/.config/` and `~/`)
-- Changes made to either location are immediately reflected everywhere
-- No copying or manual syncing required - edit once, apply everywhere
+### Current state (as of 2026-07-27)
 
-### Symlink Mappings
+- **Zellij: removed.** Replaced by Ghostty's native splits and tabs. Do not
+  reintroduce it, and do not suggest `zellij` commands.
+- **Alacritty: removed.** Ghostty is the only terminal.
+- **atuin: never installed.** Ignore any older reference to it.
+- **Theme: Tokyo Night (Night)** by default, via a central switchable system.
 
-The following symlinks are created by `install.sh`:
-- `ghostty/` → `~/.config/ghostty/` (primary terminal)
-- `alacritty/` → `~/.config/alacritty/` (alternative terminal)
-- `zellij/` → `~/.config/zellij/`
-- `bash/.bashrc` → `~/.bashrc`
-- `starship/starship.toml` → `~/.config/starship.toml`
-- `nvim/` → `~/.config/nvim/`
+### Symlinks created by `install.sh`
 
-### Directory Structure
+| Repo path | System path |
+|---|---|
+| `ghostty/` | `~/.config/ghostty/` |
+| `nvim/` | `~/.config/nvim/` |
+| `starship/starship.toml` | `~/.config/starship.toml` |
+| `bash/.bashrc` | `~/.bashrc` |
+| `zed/settings.json` | `~/.config/zed/settings.json` |
+
+## Theming — the central mechanism
+
+**Never hardcode a color in a tool's config.** All colors come from one file per
+theme in `themes/`. This is the most important rule in the repo.
 
 ```
-├── ghostty/            # Primary terminal emulator config
-│   ├── config          # Main config with Ayu Dark theme, cursor trail shader
-│   └── shaders/        # Custom GLSL shaders
-│       └── cursor_trail.glsl  # Animated cursor trail effect
-├── alacritty/          # Alternative terminal emulator config
-│   └── alacritty.toml  # Main config with Ayu Dark theme
-├── bash/               # Shell configuration
-│   └── .bashrc         # Bash config with zellij auto-start, fzf, zoxide
-├── starship/           # Shell prompt
-│   └── starship.toml   # Prompt config with Ayu Dark theme and language modules
-├── zellij/             # Terminal multiplexer
-│   ├── config.kdl      # Main zellij configuration (keybindings, themes, plugins)
-│   └── layouts/        # Custom layouts
-│       └── default.kdl # Default layout with Ayu Dark colors
-├── nvim/               # Neovim configuration (LazyVim)
-│   ├── init.lua        # Entry point
-│   ├── lua/
-│   │   ├── config/     # Core LazyVim configuration overrides
-│   │   │   ├── autocmds.lua
-│   │   │   ├── keymaps.lua   # Custom save function with Ctrl+s
-│   │   │   ├── options.lua   # scrolloff=8, linebreak settings
-│   │   │   └── lazy.lua      # Lazy.nvim plugin manager setup
-│   │   └── plugins/    # Plugin customizations
-│   │       ├── colorscheme.lua  # Ayu Dark theme
-│   │       ├── disabled.lua     # Disabled default plugins
-│   │       ├── lazygit.lua      # LazyGit integration
-│   │       ├── treesitter.lua   # Syntax highlighting
-│   │       └── ui.lua           # UI with Ayu theme
-│   └── stylua.toml     # Lua formatter config
-├── scripts/            # Management utilities
-│   ├── prepare.sh      # Copy existing configs to repo before install
-│   └── sync.sh         # Maintenance and status checking
-├── install.sh          # Main installation script (creates symlinks, installs tools)
-├── README.md           # User-facing documentation (Spanish)
-└── CLAUDE.md           # This file - AI assistant context
+themes/<name>.sh          SOURCE OF TRUTH: palette + per-tool theme identifiers
+        │
+        └── scripts/theme.sh <name>
+                ├── GENERATES  ghostty/theme.conf                 (included from ghostty/config)
+                ├── GENERATES  ghostty/shaders/active_cursor.glsl  (gitignored)
+                ├── GENERATES  nvim/lua/config/theme.lua
+                ├── PATCHES    starship/starship.toml   the `palette = "..."` line
+                └── PATCHES    zed/settings.json        the `"dark": "..."` line
 ```
+
+- Available themes: `tokyonight-night`, `tokyonight-storm`, `ayu-dark`.
+- State markers: `.theme` and `.cursor-fx` at the repo root (both committed).
+- Files with a `GENERADO por scripts/theme.sh` header are **never** hand-edited.
+- A hardcoded hex outside `themes/*.sh` and starship's `[palettes.*]` is a bug.
+- Adding a theme also requires a starship palette block and an nvim colorscheme
+  plugin — see AGENTS.md for the checklist.
+
+### Shader tagging
+
+Cursor shaders in `ghostty/shaders/effects/` keep exactly one themed constant,
+tagged `// @theme:accent` or `// @theme:bg`. `theme.sh` rewrites the `vecN(...)`
+on tagged lines only, anchored on the first `=`. Never put a `vecN(...)` inside a
+tagged line's comment — it will be captured by the rewrite.
 
 ## Common Commands
 
-### Installation & Setup
 ```bash
-# Initial setup (both terminals)
-./install.sh
+./install.sh                          # Symlinks + tools + apply theme
+./install.sh --theme ayu-dark         # Install with a specific theme
 
-# Install specific terminal
-./install.sh --ghostty    # Ghostty only (with atuin)
-./install.sh --alacritty  # Alacritty only (no atuin)
+theme                                 # List themes / show active   (scripts/theme.sh)
+theme tokyonight-night                # Apply everywhere
+theme --reapply                       # Regenerate artifacts
 
-# Prepare existing configs (run before install.sh on new machine)
-./scripts/prepare.sh
+cfx                                   # List cursor effects         (scripts/cursor-fx.sh)
+cfx bloom                             # Switch effect (auto-tinted to the theme)
 
-# Check symlink status
+cross                                 # 2x2 split layout            (scripts/ghostty-cross.sh)
+
+./scripts/sync.sh status              # Symlinks + theme + artifacts
+./scripts/sync.sh backup              # Timestamped backup
+```
+
+## Validation (there is no test suite)
+
+```bash
+ghostty +validate-config --config-file="$PWD/ghostty/config"     # also checks theme.conf
+STARSHIP_CONFIG="$PWD/starship/starship.toml" starship prompt    # palette keys must resolve
+nvim --headless -c 'lua print(vim.g.colors_name)' -c qa          # colorscheme applied?
 ./scripts/sync.sh status
-
-# Check git status
-./scripts/sync.sh git-status
-
-# Create backup of current configs
-./scripts/sync.sh backup
+bash -n install.sh
 ```
 
-### Development Workflow
-```bash
-# Make changes directly to files in this repo
-vim ghostty/config
+## Traps
 
-# Changes are immediately active in the system
-# Commit when satisfied
-git add . && git commit -m "Update ghostty config"
-git push
-
-# On other machines
-git pull  # Changes immediately active via symlinks
-```
+1. **`ghostty +validate-config` emits a screen clear.** Redirect it
+   (`>/dev/null 2>&1`) when running it mid-script, or it wipes earlier output.
+2. **Ghostty keybinds are one action each.** Ghostty 1.3.1 supports trigger
+   *sequences* (`ctrl+a>d`) but not action chaining, and has no layout files. A
+   2×2 cross needs four keystrokes or the `cross` script.
+3. **Never hardcode the repo path in a script.** Derive it:
+   `DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"`.
+   `install.sh` used to hardcode the wrong path and broke every fresh clone.
+4. **`active_cursor.glsl` is gitignored.** A fresh clone needs
+   `theme --reapply` before Ghostty finds it.
+5. **`theme.sh` uses only bash builtins + `awk`** on purpose, so a fresh machine
+   can theme itself before extra tools exist. Don't add dependencies to it.
+6. **Editing through `~/.config/...` edits the repo.** Expect `git status` changes.
 
 ## Key Configuration Details
 
-### Theming Philosophy
-All tools use the **Ayu Dark** color scheme for a consistent visual experience:
+### Ghostty (`ghostty/config`)
 
-#### Ghostty (`ghostty/config`)
-- **Theme**: Ayu Dark with custom cursor trail shader
-- **Font**: Google Sans Code NF, size 18
-- **Cursor**: Ayu Dark yellow (#FFB454) with animated trail effect
-- **Window**: 240×70 characters, decorations enabled, 10px/5px padding
-- **Shell**: Bash with shell integration
-- **Shader**: `shaders/cursor_trail.glsl` - Creates motion blur trail effect
-- **Colors**:
-  - Background: #0A0E14
-  - Foreground: #B3B1AD
-  - 16-color Ayu Dark palette
+- Font: Google Sans Code NF, size 15
+- Window: 180×45 characters, decorations on, 10px/5px padding
+- Shell: `/opt/homebrew/bin/bash` with shell integration, `no-cursor` feature
+- Cursor: block, native blink off (the `9-smearbreathe` shader emits its own)
+- Shader: `shaders/active_cursor.glsl`, `custom-shader-animation = always`
+- Keybinds: splits (`cmd+d`, `cmd+shift+d`), vim navigation (`cmd+alt+hjkl`),
+  resize (`cmd+ctrl+hjkl`), equalize (`cmd+ctrl+r`), tabs (`cmd+t`, `cmd+shift+hl`)
 
-#### Alacritty (`alacritty/alacritty.toml`)
-- **Theme**: Ayu Dark matching Ghostty
-- **Font**: Google Sans Code NF, size 18
-- **Window**: 150×30 columns, no decorations, 10px/5px padding
-- **Shell**: /bin/bash via terminal config
-- **Same Ayu Dark color palette** as Ghostty
+### Bash (`bash/.bashrc`)
 
-#### Starship (`starship/starship.toml`)
-- **Custom Ayu Dark palette** (lines 29-53)
-- **Modular prompt format**: directory, OS, git branch, language modules, duration, time
-- **Language support**: Node.js, Rust, Go, PHP, Bun, Java, C, Zig, Python, Conda
-- **Truncates to repo root** with custom directory substitutions
-- **Colors match Ayu Dark** theme
+- History: 50k lines, timestamps, no duplicates, append mode
+- Tool init order matters: **Homebrew first** (puts `/opt/homebrew/bin` on PATH),
+  then starship, zoxide, fzf
+- fzf `Ctrl+R`: 80% height, reverse layout, hidden preview
+- Aliases: `ll`/`la`/`l`, `k` (kubectl), `theme`, `cfx`, `cross`
 
-#### Zellij (`zellij/config.kdl`)
-- **Theme**: ayu_dark built-in
-- **Custom keybindings** with `clear-defaults=true`
-- **zjstatus plugin** with Ayu Dark colors in `layouts/default.kdl`
+### Neovim (LazyVim)
 
-#### Neovim (`nvim/lua/plugins/colorscheme.lua`)
-- **Theme**: neovim-ayu plugin (ayu-dark variant)
-- **Lualine**: "ayu" theme
-- **Consistent with terminal** Ayu Dark colors
+- Colorscheme and lualine theme both come from `require("config.theme")`
+- `nvim/lua/plugins/colorscheme.lua` declares every switchable colorscheme plugin
+- Custom keymap: `Ctrl+s` save with notification (`lua/config/keymaps.lua`)
+- Options: `scrolloff = 8`, `linebreak = true`
 
-### Bash Configuration (`bash/.bashrc`)
-- **Auto-start Zellij**: Automatically attaches to "main" session
-  - Only if not already in Zellij and not in VS Code terminal
-- **History settings**: 50k lines, timestamps, no duplicates, append mode
-- **Tool initialization**: Starship, Homebrew, zoxide, fzf
-- **FZF Ctrl+R config**: 80% height, reverse layout, hidden preview, for fuzzy history search
-- **Aliases**:
-  - `ll`, `la`, `l` - ls variations with colors
-  - `zda` - Zellij delete all sessions with auto-confirm
-  - `k` - kubectl shorthand
+### Starship (`starship/starship.toml`)
 
-### Zellij Configuration (`zellij/config.kdl`)
-- **Default mode**: `locked` - Ctrl+g to enter normal mode
-- **Keybindings**: Vim-style (`hjkl`) with clear-defaults=true
-- **Theme**: ayu_dark
-- **Navigation**:
-  - Pane mode: `d` (down), `r` (right), `x` (close), `f` (fullscreen), `tab` (switch)
-  - Tab mode: `n` (new), `hjkl` (navigate), `1-9` (jump to tab), `r` (rename)
-- **Layouts**: `default.kdl` with Ayu Dark zjstatus colors
-- **Scrollback editor**: nvim
-- **Shell**: bash
+- All palettes live in this file; module formats reference **semantic keys**
+  (`fg:blue`), never hex
+- Palette keys every theme must define: `bg`, `fg`, `muted`, `red`, `green`,
+  `yellow`, `blue`, `magenta`, `cyan`, `accent`
 
-### Neovim Configuration (LazyVim)
-- **Base**: LazyVim distribution with custom overrides
-- **Theme**: Ayu Dark via neovim-ayu plugin
-- **Custom keymaps** (`lua/config/keymaps.lua`):
-  - Ctrl+s: Custom save function with notifications
-- **Options** (`lua/config/options.lua`):
-  - `scrolloff = 8` - Keep 8 lines visible above/below cursor
-  - `linebreak = true` - Wrap at word boundaries
-- **Plugins**:
-  - LazyGit integration (`lazygit.lua`)
-  - Ayu Dark colorscheme
-  - Enhanced UI components with Ayu theme
-  - Treesitter for syntax highlighting
-  - Some default plugins disabled (`disabled.lua`)
+## Workflow
 
-### Important File Locations
-Configuration hotspots to monitor:
-- `ghostty/config:6` - Font size (18)
-- `ghostty/config:17` - Cursor color (Ayu Dark yellow)
-- `ghostty/config:21` - Cursor trail shader
-- `ghostty/config:52-53` - Window dimensions (240×70)
-- `ghostty/shaders/cursor_trail.glsl` - Custom cursor animation
-- `alacritty/alacritty.toml:6` - Font size (18)
-- `starship/starship.toml:29` - Active color palette (ayu_dark)
-- `bash/.bashrc:42-47` - Zellij auto-start logic
-- `zellij/config.kdl:1` - Active theme (ayu_dark)
-- `zellij/layouts/default.kdl` - zjstatus Ayu Dark colors
-- `nvim/lua/plugins/colorscheme.lua` - Ayu Dark theme config
-
-## Maintenance Notes
-
-### Critical Symlink Behavior
-- **Repository uses symlinks**: Direct editing of system files affects the repo
-- **Immediate propagation**: Changes in repo are instantly active (except shell config requires reload)
-- **Git tracking**: System changes appear in `git status` immediately
-- **Verification**: Run `./scripts/sync.sh status` to check symlink integrity
-
-### Backup Strategy
-- `install.sh` creates timestamped backups before creating symlinks
-- `./scripts/sync.sh backup` creates manual backups of non-symlinked configs
-- **Never overwrites** existing symlinks pointing to the repo
-
-### Installation Script (`install.sh`)
-- **Terminal selection**: `--ghostty`, `--alacritty`, or both (default)
-- **Symlinks**: Validates source files, creates parent directories, handles existing files gracefully
-- **Auto-installs tools**: zellij, neovim, zoxide, fzf, starship via Homebrew
-- **Idempotent**: Safe to run multiple times
-
-### Management Scripts
-- `scripts/prepare.sh`: Copies existing system configs to repo (run before first install)
-- `scripts/sync.sh`:
-  - `status` - Verifies all symlinks point to repo
-  - `git-status` - Shows repo status and recent commits
-  - `backup` - Creates timestamped backup of non-symlinked configs
-
-## Dependencies & Tools
-
-### Required Tools (auto-installed by install.sh)
-- **Homebrew**: Package manager for macOS
-- **Ghostty**: Primary terminal emulator with shader support
-- **Alacritty**: Alternative terminal emulator
-- **zellij**: Terminal multiplexer
-- **neovim**: Text editor with LazyVim distribution
-- **zoxide**: Smart directory navigation (`z <pattern>`, `zi` for interactive)
-- **fzf**: Fuzzy finder (Ctrl+R history, Ctrl+T files, Alt+C change dir)
-- **starship**: Cross-shell prompt
-
-### Required Fonts (manual installation)
-- **Google Sans Code NF**: Nerd Font required for icons
-  - Install: `brew tap homebrew/cask-fonts && brew install font-google-sans-code-nerd-font`
-
-### System Requirements
-- **OS**: macOS (uses Homebrew, macOS-specific paths)
-- **Shell**: Bash 5.2+ (installed via Homebrew, not default macOS bash 3.2)
-- **Terminal**: Ghostty (primary) or Alacritty
-- **Graphics**: OpenGL support for Ghostty shaders
-
-## Workflow Best Practices
-
-### Making Configuration Changes
-1. Edit files directly in this repo (e.g., `vim ghostty/config`)
-2. Changes apply immediately to system via symlinks
-3. Test the changes in your terminal/editor
-4. Commit when satisfied: `git add . && git commit -m "Change cursor color"`
-5. Push to sync across machines: `git push`
-
-### Syncing to Other Machines
-1. Clone repo: `git clone <url> ~/code/felipecarlos/dotfiles`
-2. Run installation: `cd ~/code/felipecarlos/dotfiles && ./install.sh`
-3. Install font: `brew tap homebrew/cask-fonts && brew install font-google-sans-code-nerd-font`
-4. Restart terminal (Ghostty or Alacritty)
-5. Future updates: just `git pull` (changes apply instantly)
-
-### Troubleshooting
-- **Config not applying**: Check `./scripts/sync.sh status` for broken symlinks
-- **Cursor trail not showing**: Restart Ghostty, check shader file exists in `ghostty/shaders/`
-- **Terminal not starting Zellij**: Check `.bashrc` auto-start logic (lines 42-47)
-- **Icons not showing**: Install Google Sans Code NF (Nerd Font)
-- **Command not found**: Source `.bashrc` or restart terminal after install
-
-## Special Features
-
-### Ghostty Cursor Trail Shader
-- **File**: `ghostty/shaders/cursor_trail.glsl`
-- **Effect**: Animated trail showing cursor movement path
-- **Color**: Ayu Dark yellow (#FFB454)
-- **Performance**: Minimal overhead, GPU-accelerated
-- **Inspiration**: Gentleman.Dots configuration
-
-### Zellij Auto-start
-- **Behavior**: Automatically attaches to "main" session on terminal launch
-- **Conditions**: Only if not already in Zellij and not in VS Code terminal
-- **Session**: Persistent "main" session across terminal restarts
-- **Layout**: Uses `default.kdl` with Ayu Dark zjstatus colors
+1. Edit files directly in this repo — changes apply immediately via symlinks
+2. For colors, edit `themes/<name>.sh` and run `theme --reapply`
+3. Validate with the commands above
+4. Commit: imperative mood, no conventional-commit prefixes, no AI attribution

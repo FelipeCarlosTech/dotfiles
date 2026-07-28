@@ -1,9 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Script para preparar dotfiles antes de hacer symlinks
 
 set -e
 
-DOTFILES_DIR="$HOME/code/felipecarlos/dotfiles"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+DOTFILES_DIR="$(cd "$SCRIPT_DIR/.." && pwd -P)"
 
 echo "🚀 Preparando dotfiles..."
 echo "Este script copia tus configuraciones actuales al repo dotfiles"
@@ -36,31 +37,6 @@ alias ll='ls -alF'
 alias la='ls -A'
 EOF
       ;;
-    "Alacritty")
-      mkdir -p "$dest"
-      cat >"$dest/alacritty.toml" <<'EOF'
-[env]
-TERM = "alacritty"
-
-[window]
-padding.x = 10
-padding.y = 10
-
-[font]
-size = 12.0
-EOF
-      ;;
-    "Zellij")
-      mkdir -p "$dest/layouts"
-      cat >"$dest/config.kdl" <<'EOF'
-// Configuración base de Zellij
-keybinds clear-defaults=true {
-    normal {
-        bind "Ctrl o" { SwitchToMode "tmux"; }
-    }
-}
-EOF
-      ;;
     esac
     echo "✅ Configuración base de $name creada"
   fi
@@ -72,8 +48,9 @@ echo ""
 
 # Copiar configuraciones existentes
 copy_if_exists "$HOME/.bashrc" "$DOTFILES_DIR/bash/.bashrc" "Bash"
-copy_if_exists "$HOME/.config/alacritty" "$DOTFILES_DIR/alacritty" "Alacritty"
-copy_if_exists "$HOME/.config/zellij" "$DOTFILES_DIR/zellij" "Zellij"
+
+# Ghostty: se copia tal cual; los colores los regenera scripts/theme.sh después.
+copy_if_exists "$HOME/.config/ghostty" "$DOTFILES_DIR/ghostty" "Ghostty"
 
 # Neovim es especial - copiar todo el directorio
 if [ -d "$HOME/.config/nvim" ] && [ ! -L "$HOME/.config/nvim" ]; then

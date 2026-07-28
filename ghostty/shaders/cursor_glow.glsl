@@ -15,7 +15,7 @@ vec2 normCoord(vec2 value, float isPosition) {
 }
 
 // ---- Ajustes (toca estos para tunear el efecto) -------------------
-const vec3  GLOW_COLOR    = vec3(1.0, 0.706, 0.329); // Ayu Dark ámbar (#FFB454)
+const vec3  GLOW_COLOR    = vec3(1.0, 0.706, 0.329); // @theme:accent
 const float GLOW_RADIUS   = 0.05;  // tamaño del halo (mayor = más grande)
 const float GLOW_STRENGTH = 0.55;  // intensidad máxima del halo
 const float PULSE_SPEED   = 4.0;   // velocidad del latido

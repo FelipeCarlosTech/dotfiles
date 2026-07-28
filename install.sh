@@ -1,28 +1,37 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Dotfiles installation script for macOS
+#
+# Usage:
+#   ./install.sh                        install and apply the committed theme
+#   ./install.sh --theme <name>         install and apply a specific theme
+#
+# Available themes: see themes/*.sh (or run ./scripts/theme.sh)
 
 set -e
 
-DOTFILES_DIR="$HOME/code/dotfiles"
+# Resolve the repo from this script's own location, so the install works from
+# any clone path. (Hardcoding it broke every fresh machine that cloned elsewhere.)
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 
-# Parse command line arguments
-INSTALL_TERMINAL=""
+THEME_ARG=""
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --ghostty)
-      INSTALL_TERMINAL="ghostty"
-      shift
+    --theme)
+      THEME_ARG="${2:-}"
+      if [ -z "$THEME_ARG" ]; then
+        echo "❌ --theme requires a name (see themes/*.sh)"
+        exit 1
+      fi
+      shift 2
       ;;
-    --alacritty)
-      INSTALL_TERMINAL="alacritty"
-      shift
+    -h | --help)
+      echo "Usage: $0 [--theme <name>]"
+      echo "  --theme <name>  Apply this theme after install (see themes/*.sh)"
+      exit 0
       ;;
     *)
       echo "Unknown option: $1"
-      echo "Usage: $0 [--ghostty|--alacritty]"
-      echo "  --ghostty   Install only Ghostty terminal"
-      echo "  --alacritty Install only Alacritty terminal"
-      echo "  (no flag)   Install both terminals"
+      echo "Usage: $0 [--theme <name>]"
       exit 1
       ;;
   esac
@@ -30,18 +39,16 @@ done
 
 echo "🍎 Installing dotfiles for macOS..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-if [ -n "$INSTALL_TERMINAL" ]; then
-  echo "Terminal: $INSTALL_TERMINAL only"
-else
-  echo "Terminal: Both Alacritty and Ghostty"
-fi
+echo "Repo:     $DOTFILES_DIR"
+echo "Terminal: Ghostty"
 echo ""
 
 # Create symlink function
 create_symlink() {
   local source="$1"
   local target="$2"
-  local name="$(basename "$target")"
+  local name
+  name="$(basename "$target")"
 
   echo "→ $name"
 
@@ -55,7 +62,7 @@ create_symlink() {
   mkdir -p "$(dirname "$target")"
 
   # Handle existing file/directory
-  if [ -e "$target" ]; then
+  if [ -e "$target" ] || [ -L "$target" ]; then
     if [ -L "$target" ]; then
       # Existing symlink
       if [ "$(readlink "$target")" = "$source" ]; then
@@ -65,7 +72,8 @@ create_symlink() {
       rm "$target"
     else
       # Real file/directory - backup
-      local backup="$target.backup.$(date +%Y%m%d-%H%M%S)"
+      local backup
+      backup="$target.backup.$(date +%Y%m%d-%H%M%S)"
       mv "$target" "$backup"
       echo "  ✓ Backed up to: $backup"
     fi
@@ -86,19 +94,8 @@ fi
 
 # Install all required applications and tools
 echo "🔧 Installing applications and tools..."
-
-# Install terminal emulator(s) based on flag
-if [ -z "$INSTALL_TERMINAL" ]; then
-  # No flag: install both
-  brew install --cask alacritty ghostty 2>/dev/null || true
-elif [ "$INSTALL_TERMINAL" = "ghostty" ]; then
-  brew install --cask ghostty 2>/dev/null || true
-elif [ "$INSTALL_TERMINAL" = "alacritty" ]; then
-  brew install --cask alacritty 2>/dev/null || true
-fi
-
-# Install other tools
-brew install zellij neovim zoxide fzf starship lazygit node ripgrep fd 2>/dev/null || true
+brew install --cask ghostty 2>/dev/null || true
+brew install neovim zoxide fzf starship lazygit node ripgrep fd bash 2>/dev/null || true
 
 # Install Zed editor
 brew install --cask zed 2>/dev/null || true
@@ -106,29 +103,20 @@ echo ""
 
 # Create symlinks
 echo "🔗 Creating symlinks..."
-
-# Create terminal symlinks based on flag
-if [ -z "$INSTALL_TERMINAL" ]; then
-  # No flag: create both
-  create_symlink "$DOTFILES_DIR/alacritty" "$HOME/.config/alacritty"
-  create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
-elif [ "$INSTALL_TERMINAL" = "ghostty" ]; then
-  create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
-elif [ "$INSTALL_TERMINAL" = "alacritty" ]; then
-  create_symlink "$DOTFILES_DIR/alacritty" "$HOME/.config/alacritty"
-fi
-
-# Create other symlinks
-create_symlink "$DOTFILES_DIR/zellij" "$HOME/.config/zellij"
+create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
 create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
 create_symlink "$DOTFILES_DIR/bash/.bashrc" "$HOME/.bashrc"
 create_symlink "$DOTFILES_DIR/zed/settings.json" "$HOME/.config/zed/settings.json"
+echo ""
+
+# Make the management scripts executable
+chmod +x "$DOTFILES_DIR"/scripts/*.sh "$DOTFILES_DIR/install.sh"
 
 # Create .bash_profile if it doesn't exist (needed for login shells)
 if [ ! -f "$HOME/.bash_profile" ]; then
   echo "→ .bash_profile"
-  cat > "$HOME/.bash_profile" << 'EOF'
+  cat >"$HOME/.bash_profile" <<'EOF'
 if [[ -f ~/.bashrc ]]; then
   source ~/.bashrc
 fi
@@ -146,6 +134,18 @@ if [ -f "$(brew --prefix)/opt/fzf/install" ]; then
   "$(brew --prefix)/opt/fzf/install" --key-bindings --completion --no-update-rc --no-bash 2>/dev/null || true
   echo ""
 fi
+
+# Apply the theme. This generates ghostty/theme.conf, the active cursor shader,
+# and nvim/lua/config/theme.lua, and points starship + Zed at the same palette.
+echo "🎨 Applying theme..."
+if [ -n "$THEME_ARG" ]; then
+  "$DOTFILES_DIR/scripts/theme.sh" "$THEME_ARG"
+elif [ -f "$DOTFILES_DIR/.theme" ]; then
+  "$DOTFILES_DIR/scripts/theme.sh" --reapply
+else
+  "$DOTFILES_DIR/scripts/theme.sh" tokyonight-night
+fi
+echo ""
 
 # Optional: Install JUnit Console Standalone for neotest-java
 echo "☕ JUnit Console Standalone (for running Java tests in Neovim)"
@@ -169,18 +169,19 @@ echo "✅ Installation complete!"
 echo ""
 echo "📝 Next steps:"
 echo "   1. Install font manually:"
-echo "      brew tap homebrew/cask-fonts"
 echo "      brew install font-google-sans-code-nerd-font"
-echo "   2. Restart your terminal"
+echo "   2. Restart Ghostty"
 echo "   3. Open Neovim - plugins will auto-install"
 echo "   4. Open Zed and install these extensions manually:"
-echo "      • Theme: Catppuccin Mocha (Blur) [Heavy]"
+echo "      • Theme: Tokyo Night   (or Ayu, if you switch to ayu-dark)"
 echo "      • Icons: Material Icon Theme"
 echo "      (cmd+shift+p → 'zed: extensions')"
 echo ""
 echo "💡 Quick tips:"
 echo "   • Edit files in $DOTFILES_DIR - changes apply instantly"
-echo "   • Ctrl+g in terminal to unlock Zellij"
-echo "   • z <dir> to jump with zoxide"
-echo "   • Ctrl+R for fzf history search"
+echo "   • theme              switch the theme across every tool"
+echo "   • cfx                switch the Ghostty cursor effect"
+echo "   • cross              build a 2x2 split layout in Ghostty"
+echo "   • z <dir>            jump with zoxide"
+echo "   • Ctrl+R             fzf history search"
 echo ""
