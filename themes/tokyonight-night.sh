@@ -46,5 +46,3 @@ STARSHIP_PALETTE="tokyonight_night"
 # Must match a colorscheme provided by a plugin in nvim/lua/plugins/colorscheme.lua
 NVIM_COLORSCHEME="tokyonight-night"
 NVIM_LUALINE="tokyonight"
-# Requires the "Tokyo Night" theme extension in Zed
-ZED_THEME="Tokyo Night"

@@ -8,8 +8,9 @@ Personal macOS dotfiles using **symlinks as source of truth**. The repo IS the l
 configuration — files are symlinked to `~/.config/` and `~/`, so every edit is
 immediately active on the system. There is no build step or compilation.
 
-Stack: **Ghostty** + **Bash** + **LazyVim** + **Starship** + **Zed**. Zellij and
-Alacritty were removed on 2026-07-27 (Ghostty's native splits/tabs replaced Zellij).
+Stack: **Ghostty** + **Bash** + **LazyVim** + **Starship**. Zellij, Alacritty, and
+Zed were all removed on 2026-07-27 — Ghostty's native splits/tabs replaced the
+multiplexer, and Neovim is the only editor.
 
 Languages/formats: Bash shell scripts, Lua (Neovim/LazyVim), TOML, GLSL, JSON.
 
@@ -56,7 +57,6 @@ Note: `ghostty +validate-config` emits a screen clear. Redirect its output
 - **Ghostty / Starship**: reload Ghostty with `Cmd+Shift+,`; `source ~/.bashrc` for the prompt.
 - **Bash config** (`bash/.bashrc`): `source ~/.bashrc` or restart terminal.
 - **Neovim config** (`nvim/`): restart Neovim; plugins auto-install via lazy.nvim.
-- **Zed**: picks up `settings.json` changes live.
 
 ## Theming
 
@@ -70,8 +70,7 @@ themes/<name>.sh          SOURCE OF TRUTH: palette + per-tool theme identifiers
                 ├── GENERATES  ghostty/theme.conf                  (included from ghostty/config)
                 ├── GENERATES  ghostty/shaders/active_cursor.glsl   (gitignored; effect + accent)
                 ├── GENERATES  nvim/lua/config/theme.lua            (colorscheme + lualine names)
-                ├── PATCHES    starship/starship.toml               the `palette = "..."` line
-                └── PATCHES    zed/settings.json                    the `"dark": "..."` line
+                └── PATCHES    starship/starship.toml               the `palette = "..."` line
 ```
 
 State markers at the repo root: `.theme` (active theme) and `.cursor-fx` (active
@@ -82,7 +81,7 @@ cursor effect). Both are committed so a fresh clone reproduces the same look.
 1. Copy an existing `themes/<name>.sh` and fill in every variable. `theme.sh`
    fails loudly if any of `THEME_LABEL`, `BG`, `FG`, `CURSOR`, `CURSOR_TEXT`,
    `SELECTION_BG`, `SELECTION_FG`, `PALETTE_0`–`PALETTE_15`, `STARSHIP_PALETTE`,
-   `NVIM_COLORSCHEME`, `NVIM_LUALINE`, or `ZED_THEME` is missing.
+   `NVIM_COLORSCHEME`, or `NVIM_LUALINE` is missing.
 2. Add a matching `[palettes.<STARSHIP_PALETTE>]` block in `starship/starship.toml`
    with the **same key set** as the existing palettes (`bg`, `fg`, `muted`, `red`,
    `green`, `yellow`, `blue`, `magenta`, `cyan`, `accent`).
@@ -214,4 +213,3 @@ Plugin documentation header style (use in `lua/plugins/` files):
 | `nvim/lua/plugins/colorscheme.lua` | Declares every switchable colorscheme plugin |
 | `nvim/lua/plugins/ui.lua` | Lualine, incline, dashboard |
 | `starship/starship.toml` | Prompt; all palettes live here |
-| `zed/settings.json` | Zed editor settings |

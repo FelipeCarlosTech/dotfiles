@@ -33,7 +33,6 @@ case "$1" in
   check_symlink "$HOME/.config/ghostty" "Ghostty"
   check_symlink "$HOME/.config/nvim" "Neovim"
   check_symlink "$HOME/.config/starship.toml" "Starship"
-  check_symlink "$HOME/.config/zed/settings.json" "Zed"
 
   echo ""
   echo "🎨 Estado del tema:"

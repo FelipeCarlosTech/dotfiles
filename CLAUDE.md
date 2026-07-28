@@ -8,7 +8,7 @@ Guidance for Claude Code when working in this repository.
 
 ## Repository Overview
 
-Personal macOS dotfiles for a **Ghostty + Bash + LazyVim + Starship + Zed** setup.
+Personal macOS dotfiles for a **Ghostty + Bash + LazyVim + Starship** setup.
 
 The architectural principle is **symlinks as source of truth**: the repository IS
 the live configuration, not a backup. Files are symlinked into `~/.config/` and
@@ -20,6 +20,7 @@ through the symlink shows up in `git status`.
 - **Zellij: removed.** Replaced by Ghostty's native splits and tabs. Do not
   reintroduce it, and do not suggest `zellij` commands.
 - **Alacritty: removed.** Ghostty is the only terminal.
+- **Zed: removed.** Neovim is the only editor. Do not reintroduce `zed/`.
 - **atuin: never installed.** Ignore any older reference to it.
 - **Theme: Tokyo Night (Night)** by default, via a central switchable system.
 
@@ -31,7 +32,6 @@ through the symlink shows up in `git status`.
 | `nvim/` | `~/.config/nvim/` |
 | `starship/starship.toml` | `~/.config/starship.toml` |
 | `bash/.bashrc` | `~/.bashrc` |
-| `zed/settings.json` | `~/.config/zed/settings.json` |
 
 ## Theming — the central mechanism
 
@@ -45,8 +45,7 @@ themes/<name>.sh          SOURCE OF TRUTH: palette + per-tool theme identifiers
                 ├── GENERATES  ghostty/theme.conf                 (included from ghostty/config)
                 ├── GENERATES  ghostty/shaders/active_cursor.glsl  (gitignored)
                 ├── GENERATES  nvim/lua/config/theme.lua
-                ├── PATCHES    starship/starship.toml   the `palette = "..."` line
-                └── PATCHES    zed/settings.json        the `"dark": "..."` line
+                └── PATCHES    starship/starship.toml   the `palette = "..."` line
 ```
 
 - Available themes: `tokyonight-night`, `tokyonight-storm`, `ayu-dark`.

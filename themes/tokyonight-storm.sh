@@ -40,5 +40,3 @@ PALETTE_15="#c0caf5" # bright white
 STARSHIP_PALETTE="tokyonight_storm"
 NVIM_COLORSCHEME="tokyonight-storm"
 NVIM_LUALINE="tokyonight"
-# Requires the "Tokyo Night" theme extension in Zed
-ZED_THEME="Tokyo Night Storm"

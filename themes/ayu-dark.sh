@@ -39,5 +39,3 @@ PALETTE_15="#FFFFFF" # bright white
 STARSHIP_PALETTE="ayu_dark"
 NVIM_COLORSCHEME="ayu-dark"
 NVIM_LUALINE="ayu"
-# Requires the "Ayu" theme extension in Zed
-ZED_THEME="Ayu Dark"

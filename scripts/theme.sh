@@ -13,9 +13,8 @@
 #   ghostty/theme.conf                 incluido desde ghostty/config
 #   ghostty/shaders/active_cursor.glsl shader del efecto, tintado con el accent
 #   nvim/lua/config/theme.lua          nombres de colorscheme + lualine
-# Parcheados en el lugar (una línea cada uno):
+# Parcheado en el lugar (una línea):
 #   starship/starship.toml             la línea `palette = "..."`
-#   zed/settings.json                  la línea `"dark": "..."`
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
@@ -198,25 +197,6 @@ patch_starship() {
   echo "   ✓ starship/starship.toml (paleta: $STARSHIP_PALETTE)"
 }
 
-patch_zed() {
-  local file="$DOTFILES_DIR/zed/settings.json" indent line
-  [ -f "$file" ] || die "No se puede parchear un archivo que no existe: $file"
-
-  # Conserva la indentación que ya tiene esa línea.
-  indent="    "
-  while IFS= read -r line; do
-    if [[ $line =~ ^([[:space:]]*)\"dark\":[[:space:]] ]]; then
-      indent="${BASH_REMATCH[1]}"
-      break
-    fi
-  done <"$file"
-
-  patch_line "$file" \
-    '^[[:space:]]*"dark":[[:space:]]' \
-    "${indent}\"dark\": \"$ZED_THEME\","
-  echo "   ✓ zed/settings.json (tema: $ZED_THEME)"
-}
-
 # ---------------------------------------------------------------------------
 # Comandos
 # ---------------------------------------------------------------------------
@@ -239,7 +219,6 @@ load_theme() {
   : "${STARSHIP_PALETTE:?themes/$name.sh debe definir STARSHIP_PALETTE}"
   : "${NVIM_COLORSCHEME:?themes/$name.sh debe definir NVIM_COLORSCHEME}"
   : "${NVIM_LUALINE:?themes/$name.sh debe definir NVIM_LUALINE}"
-  : "${ZED_THEME:?themes/$name.sh debe definir ZED_THEME}"
   GHOSTTY_THEME="${GHOSTTY_THEME:-}"
 
   local i var
@@ -280,7 +259,6 @@ apply() {
   generate_shader
   generate_nvim
   patch_starship
-  patch_zed
 
   printf '%s\n' "$THEME_NAME" >"$THEME_MARKER"
 
@@ -291,7 +269,6 @@ apply() {
   echo "   • Ghostty:  Cmd+Shift+,  para recargar"
   echo "   • Bash:     source ~/.bashrc  (o abrí una shell nueva)"
   echo "   • Neovim:   reiniciá"
-  echo "   • Zed:      lo toma solo (la extensión del tema tiene que estar instalada)"
 }
 
 main() {

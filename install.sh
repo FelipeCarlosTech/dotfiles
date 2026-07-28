@@ -96,9 +96,6 @@ fi
 echo "🔧 Installing applications and tools..."
 brew install --cask ghostty 2>/dev/null || true
 brew install neovim zoxide fzf starship lazygit node ripgrep fd bash 2>/dev/null || true
-
-# Install Zed editor
-brew install --cask zed 2>/dev/null || true
 echo ""
 
 # Create symlinks
@@ -107,7 +104,6 @@ create_symlink "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
 create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 create_symlink "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
 create_symlink "$DOTFILES_DIR/bash/.bashrc" "$HOME/.bashrc"
-create_symlink "$DOTFILES_DIR/zed/settings.json" "$HOME/.config/zed/settings.json"
 echo ""
 
 # Make the management scripts executable
@@ -136,7 +132,7 @@ if [ -f "$(brew --prefix)/opt/fzf/install" ]; then
 fi
 
 # Apply the theme. This generates ghostty/theme.conf, the active cursor shader,
-# and nvim/lua/config/theme.lua, and points starship + Zed at the same palette.
+# and nvim/lua/config/theme.lua, and points starship at the same palette.
 echo "🎨 Applying theme..."
 if [ -n "$THEME_ARG" ]; then
   "$DOTFILES_DIR/scripts/theme.sh" "$THEME_ARG"
@@ -172,10 +168,6 @@ echo "   1. Install font manually:"
 echo "      brew install font-google-sans-code-nerd-font"
 echo "   2. Restart Ghostty"
 echo "   3. Open Neovim - plugins will auto-install"
-echo "   4. Open Zed and install these extensions manually:"
-echo "      • Theme: Tokyo Night   (or Ayu, if you switch to ayu-dark)"
-echo "      • Icons: Material Icon Theme"
-echo "      (cmd+shift+p → 'zed: extensions')"
 echo ""
 echo "💡 Quick tips:"
 echo "   • Edit files in $DOTFILES_DIR - changes apply instantly"
